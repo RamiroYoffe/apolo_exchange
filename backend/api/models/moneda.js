@@ -6,3 +6,5 @@ const monedaSchema = mongoose.Schema({
   valor: { type: Number, required: true },
   visible: { type: Boolean, required: true },
 });
+
+module.exports = mongoose.model("Moneda", monedaSchema); //El model es el constructor

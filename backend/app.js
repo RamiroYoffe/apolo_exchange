@@ -5,8 +5,21 @@ const router = express.Router();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const morgan = require("morgan");
+const monedaRoutes = require("./api/routes/monedas.js");
+
+app.use(morgan("dev"));
 
 //app.use("/users", usersRoutes); => Para agregar rutas
+
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
+app.use("/", router);
+app.use("/moneda", monedaRoutes);
+
+app.use("/", router);
+app.use("/moneda", monedaRoutes);
 
 app.get("/", (req, res) => {
   res.end("Hello world");
@@ -26,11 +39,6 @@ app.use((error, req, res, next) => {
     },
   });
 });
-
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cors());
-app.use("/", router);
 
 mongoose.connect(
   "mongodb+srv://lneimark:Og18505bC292835c@apolodb.tiimz.mongodb.net/apoloDB?retryWrites=true&w=majority",
