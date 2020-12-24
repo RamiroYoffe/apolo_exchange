@@ -7,6 +7,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const monedaRoutes = require("./api/routes/monedas.js");
+const userRoutes = require("./api/routes/users");
 
 app.use(morgan("dev"));
 
@@ -17,6 +18,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use("/", router);
 app.use("/moneda", monedaRoutes);
+app.use("/user", userRoutes);
 
 app.use("/", router);
 app.use("/moneda", monedaRoutes);
