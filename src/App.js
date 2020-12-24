@@ -1,8 +1,9 @@
 import React from 'react'
-import { BrowserRouter as Router, Route } from 'react-router-dom'
+import { Route, Link, Switch } from 'react-router-dom'
 
 import Main from './components/Main'
 import Navbar from './components/Navbar'
+import Calculator from './components/Calculator'
 import Manager from './components/Manager'
 import OrderList from './components/OrderList'
 import Order from './components/Order'
@@ -10,14 +11,17 @@ import CurrencySettings from './components/CurrencySettings'
 
 function App() {
 	return (
-		<Router>
+		<div>
 			<Navbar />
-			<Route path='/' exact component={Main} />
-			<Route path='/manager' component={Manager} />
-			<Route path='/manager/orders' component={OrderList} />
-			<Route path='/manager/orders/:id' component={Order} />
-			<Route path='/manager/currency' component={CurrencySettings} />
-		</Router>
+			<Calculator />
+			<Switch>
+				<Route exact path='/' component={Main} />
+				<Route exact path='/manager' component={Manager} />
+				<Route exact path='/manager/orders' component={OrderList} />
+				<Route path='/manager/orders/:orderId' component={Order} />
+				<Route path='/manager/currency' component={CurrencySettings} />
+			</Switch>
+		</div>
 	)
 }
 
