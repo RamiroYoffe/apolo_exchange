@@ -5,10 +5,10 @@ const Moneda = require("../models/moneda");
 const mongoose = require("mongoose");
 
 //Ver las monedas con un get all done
-//Patch de monedas particulares para cambiar su valor siendo admin
+//Patch de monedas particulares para cambiar su valor siendo admin done. Faltaria la parte del admin pero es middleware
 //Pedir moneda particular con un get one done
 //Crear monedas con un post done
-//Eliminar monedas
+//Eliminar monedas done
 
 exports.moneda_get_all = (req, res, next) => {
   Moneda.find()
@@ -98,5 +98,42 @@ exports.moneda_delete_nombre = (req, res, next) => {
           message: "No existe la moneda",
         });
       }
+    });
+};
+
+exports.moneda_modificar_valor = (req, res, next) => {
+  Moneda.find({ nombre: req.params.nombre })
+    .exec()
+    .then((doc) => {
+      if (doc.length > 0) {
+        monedaEncontrada = doc[0];
+        console.log(doc[0]);
+      } else {
+        return res.status(500).json({
+          message: "Nombre de moneda incorrecto, revisar ortografia",
+        });
+      }
+      Moneda.update(
+        { _id: monedaEncontrada._id },
+        { $set: { valor: req.body.valor } }
+      )
+        .exec()
+        .then((result) => {
+          console.log(result);
+          res.status(200).json({
+            message: "Moneda actualizada",
+          });
+        })
+        .catch((err) => {
+          res.status(500).json({
+            error: err,
+            message: "error al actualizar moneda, revisar que sea un numero",
+          });
+        });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+      });
     });
 };
