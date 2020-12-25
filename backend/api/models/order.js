@@ -19,3 +19,5 @@ const orderSchema = mongoose.Schema({
   monedaRecibo: { type: String, required: true },
   time: { type: Date, default: Date.now },
 });
+
+module.exports = mongoose.model("Order", orderSchema);
