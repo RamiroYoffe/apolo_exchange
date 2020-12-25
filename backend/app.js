@@ -8,6 +8,7 @@ const bodyParser = require("body-parser");
 const morgan = require("morgan");
 const monedaRoutes = require("./api/routes/monedas.js");
 const userRoutes = require("./api/routes/users");
+const orderRoutes = require("./api/routes/orders");
 
 app.use(morgan("dev"));
 
@@ -22,6 +23,7 @@ app.use("/user", userRoutes);
 
 app.use("/", router);
 app.use("/moneda", monedaRoutes);
+app.use("/order", orderRoutes);
 
 app.get("/", (req, res) => {
   res.end("Hello world");

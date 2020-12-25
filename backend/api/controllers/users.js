@@ -24,7 +24,7 @@ exports.user_get_all = (req, res, next) => {
     });
 };
 
-exports.user_crear = (req, res, next) => {
+exports.user_register = (req, res, next) => {
   id = new mongoose.Types.ObjectId();
   // let mailOptions = {
   //   // should be replaced with real recipient's account
@@ -121,7 +121,5 @@ exports.user_login = (req, res, next) => {
     });
 };
 
-exports.user_add_order = (req, res, next) => {
-  //https://mongoosejs.com/docs/populate.html#setting-populated-fields  --> clave
-  //
-};
+//https://mongoosejs.com/docs/populate.html#setting-populated-fields  --> clave
+//
