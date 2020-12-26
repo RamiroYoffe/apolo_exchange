@@ -14,7 +14,7 @@ const userSchema = mongoose.Schema({
   },
   password: { type: String },
   time: { type: Date, default: Date.now },
-  orders: [{ type: mongoose.Schema.Types.ObjectId, ref: "order" }],
+  orders: { type: Array, ref: "order" },
 });
 
 module.exports = mongoose.model("User", userSchema);
