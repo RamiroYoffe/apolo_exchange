@@ -1,9 +1,8 @@
 import React from 'react'
-import { Route, Link, Switch } from 'react-router-dom'
+import { Route, Switch } from 'react-router-dom'
 
 import Main from './components/Main'
 import Navbar from './components/Navbar'
-import Calculator from './components/Calculator'
 import Manager from './components/Manager'
 import OrderList from './components/OrderList'
 import Order from './components/Order'
@@ -13,7 +12,7 @@ function App() {
 	return (
 		<div>
 			<Navbar />
-			<Calculator />
+
 			<Switch>
 				<Route exact path='/' component={Main} />
 				<Route exact path='/manager' component={Manager} />

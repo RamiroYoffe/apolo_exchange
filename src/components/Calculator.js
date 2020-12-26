@@ -1,75 +1,101 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
+import CurrencyInput from './CurrencyInput'
+import CurrencySelector from './CurrencySelector'
+import currencyData from '../monedas.json'
 
 function Calculator() {
-	const [sellAmount, setSellAmount] = useState('')
-	const [buyAmount, setBuyAmount] = useState('')
-	const [sellCurrency, setSellCurrency] = useState('USD')
-	const [buyCurrency, setBuyCurrency] = useState('ARS')
-	const [tasa, setTasa] = useState(120)
+	const [amount, setAmount] = useState(0)
+	const [operation, setOperation] = useState('selling')
+	const [firstCurrency, setFirstCurrency] = useState('USD')
+	const [secondCurrency, setSecondCurrency] = useState('ARS')
 
-	function newBuyAmount() {
-		let buyPrice = sellAmount * tasa
-		setBuyAmount(buyPrice)
+	const secondAmount =
+		operation === 'selling' ? convertTo(amount, toSecond) : amount
+	const firstAmount =
+		operation === 'buying' ? convertTo(amount, toFirst) : amount
+
+	function handleAmountChange(currentAmount, currentOperation) {
+		setAmount(currentAmount)
+		setOperation(currentOperation)
 	}
 
-	useEffect(() => {
-		newBuyAmount()
-	}, [sellAmount])
-
-	useEffect(() => {}, [buyAmount])
-
-	useEffect(() => {
-		if (sellCurrency === 'ARS') {
-			setTasa(1 / 120)
+	function handleSelectChange(currentCurrency, option) {
+		if (option === 1) {
+			setFirstCurrency(currentCurrency)
 		} else {
-			setTasa(120)
+			setSecondCurrency(currentCurrency)
 		}
-	}, [sellCurrency])
+	}
+
+	function convertTo(amount, convert) {
+		const input = parseFloat(amount)
+		if (Number.isNaN(input)) {
+			return ''
+		}
+		const output = convert(input)
+		return output.toString()
+	}
+
+	function toSecond(firstAmount) {
+		return firstAmount * calcRate(true)
+	}
+
+	function toFirst(secondAmount) {
+		return secondAmount * calcRate(false)
+	}
+
+	function calcRate(buying) {
+		let rate = 0
+		const valueA = currencyData.find((curr) => curr.name === firstCurrency)
+			.value
+		const valueB = currencyData.find((curr) => curr.name === secondCurrency)
+			.value
+		if (buying) {
+			rate = ((valueA / valueB) * 1000) / 1000
+		} else {
+			rate = ((valueB / valueA) * 1000) / 1000
+		}
+		return rate
+	}
+
+	function switchCurrencies() {
+		const valueA = firstCurrency
+		const valueB = secondCurrency
+		setFirstCurrency(valueB)
+		setSecondCurrency(valueA)
+		setAmount(firstAmount)
+	}
 
 	return (
 		<div>
-			<div>
-				<input
-					name='sellAmount'
-					type='text'
-					placeholder='sell amount'
-					value={sellAmount}
-					onChange={(e) => setSellAmount(e.target.value)}
+			<fieldset>
+				<legend>Quiero vender:</legend>
+				<CurrencyInput
+					operation='selling'
+					amount={firstAmount}
+					onAmountChange={handleAmountChange}
 				/>
-				<label>
-					Quiero vender:
-					<select
-						name='sellCurrency'
-						value={sellCurrency}
-						onChange={(e) => setSellCurrency(e.target.value)}
-					>
-						<option value='ARS'>ARS</option>
-						<option value='USD'>USD</option>
-					</select>
-				</label>
-			</div>
-			<br />
-			<div>
-				<input
-					name='buyAmount'
-					type='text'
-					placeholder='buy amount'
-					value={buyAmount}
-					onChange={(e) => setBuyAmount(e.target.value)}
+				<CurrencySelector
+					currency={firstCurrency}
+					option={1}
+					onSelectChange={handleSelectChange}
 				/>
-				<label>
-					Quiero comprar:
-					<select
-						name='buyCurrency'
-						value={buyCurrency}
-						onChange={(e) => setBuyCurrency(e.target.value)}
-					>
-						<option value='ARS'>ARS</option>
-						<option value='USD'>USD</option>
-					</select>
-				</label>
-			</div>
+			</fieldset>
+			<button onClick={switchCurrencies}>Switch</button>
+			<fieldset>
+				<legend>Quiero comprar:</legend>
+				<CurrencyInput
+					operation='buying'
+					amount={secondAmount}
+					onAmountChange={handleAmountChange}
+				/>
+				<CurrencySelector
+					currency={secondCurrency}
+					option={2}
+					onSelectChange={handleSelectChange}
+				/>
+			</fieldset>
 		</div>
 	)
 }
