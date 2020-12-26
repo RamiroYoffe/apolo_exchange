@@ -48,6 +48,7 @@ exports.order_crear = (req, res, next) => {
         //La orden se agrega a la lista de ordenes
         //si existe el usuario, primero hay que revisar que sea el
 
+        //ejemplo
         //   {
         //     "mail": "lucianoneimark@gmail.com",
         //     "numeroOrden": "3",
@@ -58,6 +59,12 @@ exports.order_crear = (req, res, next) => {
         //   }
 
         const token = req.headers.authorization;
+        console.log(token);
+        if (token === undefined) {
+          return res.status(500).json({
+            error: "Auth Failed",
+          });
+        }
         const decoded = jwt.verify(token, process.env.JWT_KEY);
 
         if (decoded.mail === req.body.mail) {
