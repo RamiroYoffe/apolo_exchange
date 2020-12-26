@@ -5,7 +5,13 @@ function CurrencyInput(props) {
 		props.onAmountChange(e.target.value, props.operation)
 	}
 
-	return <input value={props.amount} onChange={handleChange} />
+	return (
+		<input
+			value={props.amount}
+			onClick={(e) => (e.target.value = '')}
+			onChange={handleChange}
+		/>
+	)
 }
 
 export default CurrencyInput

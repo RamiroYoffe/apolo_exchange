@@ -15,6 +15,6 @@
 		"id":2,
 		"name":"BIT",
         "value":"23000",
-        "disabled":true
+        "disabled":false
 	}
 ]

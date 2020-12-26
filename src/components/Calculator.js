@@ -1,10 +1,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import CurrencyInput from './CurrencyInput'
 import CurrencySelector from './CurrencySelector'
 import currencyData from '../monedas.json'
 
-function Calculator() {
+function Calculator(props) {
 	const [amount, setAmount] = useState(0)
 	const [operation, setOperation] = useState('selling')
 	const [firstCurrency, setFirstCurrency] = useState('USD')
@@ -66,6 +66,15 @@ function Calculator() {
 		setSecondCurrency(valueA)
 		setAmount(firstAmount)
 	}
+
+	useEffect(() => {
+		props.updateValues(
+			firstAmount,
+			secondAmount,
+			firstCurrency,
+			secondCurrency
+		)
+	}, [amount])
 
 	return (
 		<div>
