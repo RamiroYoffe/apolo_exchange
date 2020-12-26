@@ -47,6 +47,16 @@ exports.order_crear = (req, res, next) => {
         //Se modifica el usuario en el campo de orden y se agrega la orden en cuestion
         //La orden se agrega a la lista de ordenes
         //si existe el usuario, primero hay que revisar que sea el
+
+        //   {
+        //     "mail": "lucianoneimark@gmail.com",
+        //     "numeroOrden": "3",
+        //     "cantidadEnvio": "1000",
+        //     "cantidadRecibo": "500000",
+        //     "monedaEnvio": "Bitcoin",
+        //     "monedaRecibo": "Thether"
+        //   }
+
         const token = req.headers.authorization;
         const decoded = jwt.verify(token, process.env.JWT_KEY);
 
@@ -87,6 +97,21 @@ exports.order_crear = (req, res, next) => {
         //Que pasa si el usuario no existe?
         //Si el usuario no existe los datos hay que completarlos a mano
         //La orden se agrega a la lista de ordenes
+
+        //ejemplo
+        // {
+        //   "cbu": "3453453643",
+        //   "cuil": "878347585",
+        //   "nombre_cuenta":"Luciano Neimark",
+        //   "nombre_usuario":"Luciano Neimark",
+        //   "mail": "lucianoneimark@gmail.com",
+        //   "cantidadEnvio":"20",
+        //   "cantidadRecibo": "30",
+        //   "monedaEnvio": "Bitcoin",
+        //   "monedaRecibo": "Peso Argentino",
+        //   "numeroOrden": "2"
+        // }
+
         const orden = new Order({
           _id: new mongoose.Types.ObjectId(),
           cbu: req.body.cbu,
