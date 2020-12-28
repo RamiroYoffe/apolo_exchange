@@ -1,10 +1,13 @@
 import React from 'react'
-import monedas from '../monedas.json'
 
 function CurrencySelector(props) {
-	const currencies = monedas.map((curr) => (
-		<option key={curr.id} disabled={curr.disabled} value={curr.name}>
-			{curr.name}
+	const currencies = props.monedas.map((curr) => (
+		<option
+			key={curr.doc._id}
+			disabled={!curr.doc.visible}
+			value={curr.doc.nombre}
+		>
+			{curr.doc.nombre}
 		</option>
 	))
 	function handleChange(e) {

@@ -1,15 +1,23 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import data from '../Data.json'
+import axios from 'axios'
 
 function OrderList() {
-	const orders = data.map((ord) => (
-		<div key={ord.id}>
+	const [info, setInfo] = useState([])
+	useEffect(() => {
+		axios.get('http://localhost:5000/order').then((response) => {
+			setInfo(response.data.Orders)
+		})
+	}, [])
+
+	const orders = info.map((ord) => (
+		<div key={ord.doc.numeroOrden}>
 			<h3>
-				{ord.id} | {ord.name} | {ord.sell}
-				{ord.sellCurrency} | {ord.status}
+				{ord.doc.numeroOrden} | {ord.doc.nombre_cuenta} |
+				{ord.doc.cantidadEnvio} |{ord.doc.monedaEnvio}
+				{ord.doc.cantidadRecibo} | {ord.doc.monedaRecibo}
 			</h3>
-			<Link to={`/manager/orders/${ord.id}`}>See order</Link>
+			<Link to={`/manager/orders/${ord.doc.id}`}>See order</Link>
 			<hr />
 		</div>
 	))

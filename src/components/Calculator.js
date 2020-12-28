@@ -1,19 +1,26 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 import CurrencyInput from './CurrencyInput'
 import CurrencySelector from './CurrencySelector'
-import currencyData from '../monedas.json'
 
 function Calculator(props) {
 	const [amount, setAmount] = useState(0)
 	const [operation, setOperation] = useState('selling')
 	const [firstCurrency, setFirstCurrency] = useState('USD')
 	const [secondCurrency, setSecondCurrency] = useState('ARS')
+	const [info, setInfo] = useState([])
 
 	const secondAmount =
 		operation === 'selling' ? convertTo(amount, toSecond) : amount
 	const firstAmount =
 		operation === 'buying' ? convertTo(amount, toFirst) : amount
+
+	useEffect(() => {
+		axios.get('http://localhost:5000/moneda').then((response) => {
+			setInfo(response.data.monedas)
+		})
+	}, [])
 
 	function handleAmountChange(currentAmount, currentOperation) {
 		setAmount(currentAmount)
@@ -47,16 +54,21 @@ function Calculator(props) {
 
 	function calcRate(buying) {
 		let rate = 0
-		const valueA = currencyData.find((curr) => curr.name === firstCurrency)
-			.value
-		const valueB = currencyData.find((curr) => curr.name === secondCurrency)
-			.value
+		const valueA = findCurrencyData(firstCurrency)
+		const valueB = findCurrencyData(secondCurrency)
 		if (buying) {
 			rate = ((valueA / valueB) * 1000) / 1000
 		} else {
 			rate = ((valueB / valueA) * 1000) / 1000
 		}
 		return rate
+	}
+
+	function findCurrencyData(mone) {
+		axios.get(`http://localhost:5000/moneda/ARS`).then((response) => {
+			console.log(response.data.monedas[0].doc.valor)
+			return response.data.monedas[0].doc.valor
+		})
 	}
 
 	function switchCurrencies() {
@@ -87,6 +99,7 @@ function Calculator(props) {
 				/>
 				<CurrencySelector
 					currency={firstCurrency}
+					monedas={info}
 					option={1}
 					onSelectChange={handleSelectChange}
 				/>
@@ -101,6 +114,7 @@ function Calculator(props) {
 				/>
 				<CurrencySelector
 					currency={secondCurrency}
+					monedas={info}
 					option={2}
 					onSelectChange={handleSelectChange}
 				/>
