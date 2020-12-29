@@ -6,7 +6,7 @@ import CurrencySelector from './CurrencySelector'
 
 function Calculator(props) {
 	const [amount, setAmount] = useState(0)
-	const [operation, setOperation] = useState('selling')
+	const [operation, setOperation] = useState('')
 	const [firstCurrency, setFirstCurrency] = useState('USD')
 	const [secondCurrency, setSecondCurrency] = useState('ARS')
 	const [info, setInfo] = useState([])
@@ -53,30 +53,38 @@ function Calculator(props) {
 	}
 
 	function calcRate(buying) {
+		console.log(findCurrencyData())
 		let rate = 0
-		const valueA = findCurrencyData(firstCurrency)
-		const valueB = findCurrencyData(secondCurrency)
+		console.log(firstCurrency, secondCurrency)
+		// const valueA = findCurrencyData(firstCurrency)
+		// const valueB = findCurrencyData(secondCurrency)
 		if (buying) {
-			rate = ((valueA / valueB) * 1000) / 1000
+			rate = 120
+			// valueA / valueB
 		} else {
-			rate = ((valueB / valueA) * 1000) / 1000
+			rate = 1 / 120
+			// valueB / valueA
 		}
 		return rate
 	}
 
-	function findCurrencyData(mone) {
-		axios.get(`http://localhost:5000/moneda/ARS`).then((response) => {
-			console.log(response.data.monedas[0].doc.valor)
-			return response.data.monedas[0].doc.valor
-		})
+	function findCurrencyData() {
+		for (const A in info) {
+			if (A.name === 'ARS') {
+				return A.value
+			}
+		}
+		// axios.get(`http://localhost:5000/moneda/ARS`).then((response) => {
+		// 	return response.data.monedas[0].doc.valor
+		// })
 	}
 
 	function switchCurrencies() {
-		const valueA = firstCurrency
-		const valueB = secondCurrency
-		setFirstCurrency(valueB)
-		setSecondCurrency(valueA)
-		setAmount(firstAmount)
+		// const valueA = firstCurrency
+		// const valueB = secondCurrency
+		// setFirstCurrency(valueB)
+		// setSecondCurrency(valueA)
+		// setAmount(firstAmount)
 	}
 
 	useEffect(() => {

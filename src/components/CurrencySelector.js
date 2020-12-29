@@ -5,9 +5,9 @@ function CurrencySelector(props) {
 		<option
 			key={curr.doc._id}
 			disabled={!curr.doc.visible}
-			value={curr.doc.nombre}
+			value={curr.doc.name}
 		>
-			{curr.doc.nombre}
+			{curr.doc.name}
 		</option>
 	))
 	function handleChange(e) {
