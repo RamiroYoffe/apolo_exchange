@@ -6,7 +6,7 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const bodyParser = require("body-parser");
 const morgan = require("morgan");
-const monedaRoutes = require("./api/routes/monedas.js");
+const currencyRoutes = require("./api/routes/currencies");
 const userRoutes = require("./api/routes/users");
 const orderRoutes = require("./api/routes/orders");
 
@@ -18,11 +18,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cors());
 app.use("/", router);
-app.use("/moneda", monedaRoutes);
+app.use("/currency", currencyRoutes);
 app.use("/user", userRoutes);
 
 app.use("/", router);
-app.use("/moneda", monedaRoutes);
+app.use("/currency", currencyRoutes);
 app.use("/order", orderRoutes);
 
 app.get("/", (req, res) => {
