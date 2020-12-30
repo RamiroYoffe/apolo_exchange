@@ -25,8 +25,8 @@ exports.order_get_all = (req, res, next) => {
     });
 };
 
-exports.order_get_numeroOrden = (req, res, next) => {
-  Order.find({ numeroOrden: req.params.numeroOrden })
+exports.order_get_orderNumber = (req, res, next) => {
+  Order.find({ orderNumber: req.params.orderNumber })
     .exec()
     .then((docs) => {
       const response = {
@@ -67,17 +67,17 @@ exports.order_get_mail = (req, res, next) => {
     });
 };
 
-exports.order_delete_nombre = (req, res, next) => {
-  Order.find({ numeroOrden: req.params.numeroOrden })
+exports.order_delete_orderNumber = (req, res, next) => {
+  Order.find({ orderNumber: req.params.orderNumber })
     .exec()
-    .then((ordenEncontrada) => {
-      if (ordenEncontrada.length > 0) {
-        Order.remove({ nombre: req.params.nombre })
+    .then((orderFound) => {
+      if (orderFound.length > 0) {
+        Order.remove({ orderNumber: req.params.orderNumber })
           .exec()
-          .then((ordenExistente) => {
+          .then((order) => {
             res.status(200).json({
               message: "Orden eliminada correctamente",
-              result: ordenExistente,
+              result: order,
             });
           });
       } else {
@@ -88,7 +88,7 @@ exports.order_delete_nombre = (req, res, next) => {
     });
 };
 
-exports.order_crear = (req, res, next) => {
+exports.order_create = (req, res, next) => {
   Order.find()
     .exec()
     .then((docs) => {
@@ -107,7 +107,7 @@ exports.order_crear = (req, res, next) => {
             //ejemplo
             //   {
             //     "mail": "lucianoneimark@gmail.com",
-            //     "numeroOrden": "3",
+            //     "orderNumber": "3",
             //     "cantidadEnvio": "1000",
             //     "cantidadRecibo": "500000",
             //     "monedaEnvio": "Bitcoin",
@@ -115,7 +115,7 @@ exports.order_crear = (req, res, next) => {
             //   }
 
             const token = req.headers.authorization;
-            console.log(token);
+
             if (token === undefined) {
               return res.status(500).json({
                 error: "Auth Failed",
@@ -129,27 +129,33 @@ exports.order_crear = (req, res, next) => {
                 _id: new mongoose.Types.ObjectId(),
                 cbu: usr.cbu,
                 cuil: usr.cuil,
-                nombre_cuenta: usr.nombre_cuenta,
-                nombre_usuario: usr.nombre_usuario,
+                account_name: usr.account_name,
+                user_name: usr.user_name,
                 mail: usr.mail,
-                numeroOrden: (cant + 1).toLocaleString("en-US", {
+                orderNumber: (cant + 1).toLocaleString("en-US", {
                   minimumIntegerDigits: 7,
                   useGrouping: false,
                 }),
-                cantidadEnvio: req.body.cantidadEnvio,
-                cantidadRecibo: req.body.cantidadRecibo,
-                monedaEnvio: req.body.monedaEnvio,
-                monedaRecibo: req.body.monedaRecibo,
+                amountSent: req.body.amountSent,
+                amountRecieved: req.body.amountRecieved,
+                currencySent: req.body.currencySent,
+                currencyRecieved: req.body.currencyRecieved,
               });
-              orden.save().then((result) => {
-                res.status(201).json({
-                  message: "Orden agregada exitosamente",
-                  nombre: result.nombre,
-                  valor: result.valor,
-                  visible: result.visible,
+              orden
+                .save()
+                .then((result) => {
+                  res.status(201).json({
+                    message: "Orden agregada exitosamente",
+                    result,
+                  });
+                })
+                .catch((err) => {
+                  res.status(500).json({
+                    error: err,
+                    message: "Error - Invalid Order",
+                  });
                 });
-              });
-              usr.orders.push(orden.numeroOrden);
+              usr.orders.push(orden.orderNumber);
               usr.save();
             } else {
               return res.status(500).json({
@@ -157,11 +163,6 @@ exports.order_crear = (req, res, next) => {
               });
             }
           } else {
-            Order.find()
-              .exec()
-              .then((docs) => {
-                const cant = docs.length; //nro de orden respeta la cantidad de ordenes
-              });
             //ejemplo
             // {
             //   "cbu": "3453453643",
@@ -173,30 +174,36 @@ exports.order_crear = (req, res, next) => {
             //   "cantidadRecibo": "30",
             //   "monedaEnvio": "Bitcoin",
             //   "monedaRecibo": "Peso Argentino",
-            //   "numeroOrden": "2"
+            //   "orderNumber": "2"
             // }
 
             const orden = new Order({
               _id: new mongoose.Types.ObjectId(),
               cbu: req.body.cbu,
               cuil: req.body.cuil,
-              nombre_cuenta: req.body.nombre_cuenta,
-              nombre_usuario: req.body.nombre_usuario,
+              account_name: req.body.account_name,
+              user_name: req.body.user_name,
               mail: req.body.mail,
-              numeroOrden: cant + 1,
-              cantidadEnvio: req.body.cantidadEnvio,
-              cantidadRecibo: req.body.cantidadRecibo,
-              monedaEnvio: req.body.monedaEnvio,
-              monedaRecibo: req.body.monedaRecibo,
+              orderNumber: cant + 1,
+              amountSent: req.body.amountSent,
+              amountRecieved: req.body.amountRecieved,
+              currencySent: req.body.currencySent,
+              currencyRecieved: req.body.currencyRecieved,
             });
-            orden.save().then((result) => {
-              res.status(201).json({
-                message: "Orden agregada exitosamente",
-                nombre: result.nombre,
-                valor: result.valor,
-                visible: result.visible,
+            orden
+              .save()
+              .then((result) => {
+                res.status(201).json({
+                  message: "Order created succesfully",
+                  result,
+                });
+              })
+              .catch((err) => {
+                res.status(500).json({
+                  error: err,
+                  message: "Error - Invalid Order",
+                });
               });
-            });
           }
         })
         .catch((err) => {
@@ -205,5 +212,11 @@ exports.order_crear = (req, res, next) => {
             message: "Auth Failed. Session expired",
           });
         });
+    })
+    .catch((err) => {
+      res.status(500).json({
+        error: err,
+        message: "Error",
+      });
     });
 };

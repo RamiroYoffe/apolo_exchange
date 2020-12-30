@@ -4,8 +4,8 @@ const userSchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   cbu: { type: String, required: true },
   cuil: { type: String, required: true },
-  nombre_cuenta: { type: String, required: true },
-  nombre_usuario: { type: String, required: true },
+  account_name: { type: String, required: true },
+  user_name: { type: String, required: true },
   mail: {
     type: String,
     required: true,
