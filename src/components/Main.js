@@ -1,5 +1,4 @@
-import React, { useState } from 'react'
-import { Link, Router } from 'react-router-dom'
+import React, { useState, useEffect } from 'react'
 import Calculator from './Calculator'
 import NewOrder from './NewOrder'
 
@@ -16,10 +15,13 @@ function Main() {
 		setTransctionInfo({ currencyA, amountA, currencyB, amountB })
 	}
 
+	useEffect(() => {
+		console.log(transactionInfo)
+	}, [transactionInfo])
+
 	return (
 		<div>
-			<Calculator updateValues={updateValues} />
-			<button onClick={() => setVisible(true)}>Next</button>
+			<Calculator updateValues={updateValues} setVisible={setVisible} />
 			{visible ? <NewOrder value={transactionInfo} /> : <h1> </h1>}
 		</div>
 	)

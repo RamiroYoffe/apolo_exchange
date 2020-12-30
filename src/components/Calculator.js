@@ -17,8 +17,8 @@ function Calculator(props) {
 		operation === 'buying' ? convertTo(amount, toFirst) : amount
 
 	useEffect(() => {
-		axios.get('http://localhost:5000/moneda').then((response) => {
-			setInfo(response.data.monedas)
+		axios.get('http://localhost:5000/currency').then((response) => {
+			setInfo(response.data.currencies)
 		})
 	}, [])
 
@@ -53,48 +53,37 @@ function Calculator(props) {
 	}
 
 	function calcRate(buying) {
-		console.log(findCurrencyData())
 		let rate = 0
-		console.log(firstCurrency, secondCurrency)
-		// const valueA = findCurrencyData(firstCurrency)
-		// const valueB = findCurrencyData(secondCurrency)
+		const valueA = findCurrencyData(firstCurrency)
+		const valueB = findCurrencyData(secondCurrency)
 		if (buying) {
-			rate = 120
-			// valueA / valueB
+			rate = valueA / valueB
 		} else {
-			rate = 1 / 120
-			// valueB / valueA
+			rate = valueB / valueA
 		}
 		return rate
 	}
 
-	function findCurrencyData() {
+	function findCurrencyData(currName) {
 		for (const A in info) {
-			if (A.name === 'ARS') {
-				return A.value
+			if (info[A].doc.name === currName) {
+				return info[A].doc.value
 			}
 		}
-		// axios.get(`http://localhost:5000/moneda/ARS`).then((response) => {
-		// 	return response.data.monedas[0].doc.valor
-		// })
 	}
 
 	function switchCurrencies() {
-		// const valueA = firstCurrency
-		// const valueB = secondCurrency
-		// setFirstCurrency(valueB)
-		// setSecondCurrency(valueA)
-		// setAmount(firstAmount)
+		const valueA = firstCurrency
+		const valueB = secondCurrency
+		setFirstCurrency(valueB)
+		setSecondCurrency(valueA)
+		setAmount(firstAmount)
 	}
 
-	useEffect(() => {
-		props.updateValues(
-			firstAmount,
-			secondAmount,
-			firstCurrency,
-			secondCurrency
-		)
-	}, [amount])
+	function liftState() {
+		props.setVisible(true)
+		props.updateValues(1, 2, 'USD', 'ARS')
+	}
 
 	return (
 		<div>
@@ -107,7 +96,7 @@ function Calculator(props) {
 				/>
 				<CurrencySelector
 					currency={firstCurrency}
-					monedas={info}
+					currencies={info}
 					option={1}
 					onSelectChange={handleSelectChange}
 				/>
@@ -122,11 +111,12 @@ function Calculator(props) {
 				/>
 				<CurrencySelector
 					currency={secondCurrency}
-					monedas={info}
+					currencies={info}
 					option={2}
 					onSelectChange={handleSelectChange}
 				/>
 			</fieldset>
+			<button onClick={liftState}>Next</button>
 		</div>
 	)
 }

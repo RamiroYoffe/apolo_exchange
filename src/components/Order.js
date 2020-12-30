@@ -1,13 +1,21 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+// import { useParams } from 'react-router-dom'
+// import axios from 'axios'
 
 function Order() {
+	// const [order, setOrder] = useState()
 	// let { orderId } = useParams()
-	// const thisOrder = data.find((ord) => ord.id === orderId)
+
+	// useEffect(() => {
+	// 	axios.get(`http://localhost:5000/order/${orderId}`).then((response) => {
+	// 		setOrder(response.data)
+	// 	})
+	// 	console.log(order)
+	// }, [])
 
 	return (
 		<div>
-			<h1>Order number </h1>
+			<h1>hola </h1>
 		</div>
 	)
 }

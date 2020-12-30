@@ -17,7 +17,7 @@ function OrderList() {
 				{ord.doc.cantidadEnvio} |{ord.doc.monedaEnvio}
 				{ord.doc.cantidadRecibo} | {ord.doc.monedaRecibo}
 			</h3>
-			<Link to={`/manager/orders/${ord.doc.id}`}>See order</Link>
+			<Link to={`/manager/orders/${ord.doc.numeroOrden}`}>See order</Link>
 			<hr />
 		</div>
 	))

@@ -1,7 +1,7 @@
 import React from 'react'
 
 function CurrencySelector(props) {
-	const currencies = props.monedas.map((curr) => (
+	const currencies = props.currencies.map((curr) => (
 		<option
 			key={curr.doc._id}
 			disabled={!curr.doc.visible}
