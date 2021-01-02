@@ -82,13 +82,18 @@ function Calculator(props) {
 
 	function liftState() {
 		props.setVisible(true)
-		props.updateValues(1, 2, 'USD', 'ARS')
+		props.updateValues(
+			firstAmount,
+			secondAmount,
+			firstCurrency,
+			secondCurrency
+		)
 	}
 
 	return (
 		<div>
 			<fieldset>
-				<legend>Quiero vender:</legend>
+				<legend>Quiero vender: {firstCurrency}</legend>
 				<CurrencyInput
 					operation='selling'
 					amount={firstAmount}
@@ -103,7 +108,7 @@ function Calculator(props) {
 			</fieldset>
 			<button onClick={switchCurrencies}>Switch</button>
 			<fieldset>
-				<legend>Quiero comprar:</legend>
+				<legend>Quiero comprar: {secondCurrency}</legend>
 				<CurrencyInput
 					operation='buying'
 					amount={secondAmount}

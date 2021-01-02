@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import Calculator from './Calculator'
 import NewOrder from './NewOrder'
 
@@ -14,10 +14,6 @@ function Main() {
 	function updateValues(amountA, amountB, currencyA, currencyB) {
 		setTransctionInfo({ currencyA, amountA, currencyB, amountB })
 	}
-
-	useEffect(() => {
-		console.log(transactionInfo)
-	}, [transactionInfo])
 
 	return (
 		<div>
