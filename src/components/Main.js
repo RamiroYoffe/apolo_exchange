@@ -18,7 +18,7 @@ function Main() {
 	return (
 		<div>
 			<Calculator updateValues={updateValues} setVisible={setVisible} />
-			{visible ? <NewOrder value={transactionInfo} /> : <h1> </h1>}
+			{visible ? <NewOrder transInfo={transactionInfo} /> : <h1> </h1>}
 		</div>
 	)
 }

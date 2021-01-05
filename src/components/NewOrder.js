@@ -7,19 +7,32 @@ function NewOrder(props) {
 	const [cuil, setCuil] = useState('')
 	const [mail, setMail] = useState('')
 	const [correctInfo, setCorrectInfo] = useState(0)
+	const { currencyA, amountA, currencyB, amountB } = props.transInfo
 
 	function createOrder() {
-		axios
-			.post('http://localhost:5000/order', {
-				firstName: 'Fred',
-				lastName: 'Flintstone',
-			})
-			.then(function (response) {
-				console.log(response)
-			})
-			.catch(function (error) {
-				console.log(error)
-			})
+		if (name !== '' && cbu !== '' && cuil !== '' && correctInfo) {
+			axios
+				.post('http://localhost:5000/order', {
+					cbu: cbu,
+					cuil: cuil,
+					account_name: name,
+					user_name: name,
+					mail: mail,
+					orderNumber: '00000',
+					amountSent: amountA,
+					amountRecieved: amountB,
+					currencySent: currencyA,
+					currencyRecieved: currencyB,
+				})
+				.then(function (response) {
+					console.log(response)
+				})
+				.catch(function (error) {
+					console.log(error)
+				})
+		} else {
+			console.log('theres data missing')
+		}
 	}
 
 	function validateEmail(email) {

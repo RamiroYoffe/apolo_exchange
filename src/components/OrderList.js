@@ -11,13 +11,13 @@ function OrderList() {
 	}, [])
 
 	const orders = info.map((ord) => (
-		<div key={ord.doc.numeroOrden}>
+		<div key={ord.doc._id}>
 			<h3>
-				{ord.doc.numeroOrden} | {ord.doc.nombre_cuenta} |
-				{ord.doc.cantidadEnvio} |{ord.doc.monedaEnvio}
-				{ord.doc.cantidadRecibo} | {ord.doc.monedaRecibo}
+				{ord.doc.orderNumber} | {ord.doc.user_name} | {ord.doc.amountSent}{' '}
+				{ord.doc.currencySent} → {ord.doc.amountRecieved}{' '}
+				{ord.doc.currencyRecieved}
 			</h3>
-			<Link to={`/manager/orders/${ord.doc.numeroOrden}`}>See order</Link>
+			<Link to={`/manager/orders/${ord.doc._id}`}>See order</Link>
 			<hr />
 		</div>
 	))
