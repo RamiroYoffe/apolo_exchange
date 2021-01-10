@@ -8,11 +8,11 @@ function Calculator(props) {
 	const [amount, setAmount] = useState(0)
 	const [operation, setOperation] = useState('')
 	const [firstCurrency, setFirstCurrency] = useState({
-		system: 'Paypal',
+		system: 'paypal',
 		curr: 'USD',
 	})
 	const [secondCurrency, setSecondCurrency] = useState({
-		system: 'Transferencia',
+		system: 'transferencia',
 		curr: 'ARS',
 	})
 	const [info, setInfo] = useState([])
@@ -47,7 +47,7 @@ function Calculator(props) {
 			return ''
 		}
 		const output = convert(input)
-		return output.toString()
+		return output
 	}
 
 	function toSecond(firstAmount) {
@@ -96,7 +96,7 @@ function Calculator(props) {
 		if (
 			firstAmount > 0 &&
 			secondAmount > 0 &&
-			firstCurrency.value !== secondCurrency.value
+			firstCurrency.curr !== secondCurrency.curr
 		) {
 			props.setVisible(true)
 		}

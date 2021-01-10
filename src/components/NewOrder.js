@@ -20,7 +20,6 @@ function NewOrder(props) {
 					account_name: name,
 					user_name: name,
 					mail: mail,
-					orderNumber: '00000',
 					amountSent: amountA,
 					amountRecieved: amountB,
 					currencySent: currencyA,

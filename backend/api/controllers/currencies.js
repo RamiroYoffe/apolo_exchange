@@ -101,7 +101,7 @@ exports.currency_delete_name = (req, res, next) => {
     .exec()
     .then((currencyEncontrada) => {
       if (currencyEncontrada.length > 0) {
-        currency
+        Currency
           .remove({ name: req.params.name })
           .exec()
           .then((currencyExistente) => {
@@ -119,19 +119,19 @@ exports.currency_delete_name = (req, res, next) => {
 };
 
 exports.currency_modify_value = (req, res, next) => {
-  currency
+  Currency
     .find({ name: req.params.name })
     .exec()
     .then((doc) => {
       if (doc.length > 0) {
-        currencyEncontrada = doc[0];
-        console.log(doc[0]);
+        currencyEncontrada = doc;
+        console.log(doc);
       } else {
         return res.status(500).json({
           message: "Currency not found",
         });
       }
-      currency
+      Currency
         .update(
           { _id: currencyEncontrada._id },
           { $set: { value: req.body.value } }

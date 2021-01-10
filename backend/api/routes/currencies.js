@@ -11,7 +11,6 @@ router.get('/', currencyControllers.currency_get_all)
 router.get('/:name', currencyControllers.currency_get_one)
 router.get('/system/:system', currencyControllers.currency_get_system)
 router.delete('/:name', currencyControllers.currency_delete_name)
-router.patch('/:_id', currencyControllers.currency_modify_value_byId)
 router.patch('/:name', currencyControllers.currency_modify_value)
 
 module.exports = router
