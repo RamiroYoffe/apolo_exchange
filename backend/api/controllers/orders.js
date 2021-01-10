@@ -184,7 +184,10 @@ exports.order_create = (req, res, next) => {
               account_name: req.body.account_name,
               user_name: req.body.user_name,
               mail: req.body.mail,
-              orderNumber: cant + 1,
+              orderNumber: (cant + 1).toLocaleString("en-US", {
+                minimumIntegerDigits: 7,
+                useGrouping: false,
+              }),
               amountSent: req.body.amountSent,
               amountRecieved: req.body.amountRecieved,
               currencySent: req.body.currencySent,
