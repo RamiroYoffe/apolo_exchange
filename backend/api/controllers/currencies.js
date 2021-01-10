@@ -101,8 +101,7 @@ exports.currency_delete_name = (req, res, next) => {
     .exec()
     .then((currencyEncontrada) => {
       if (currencyEncontrada.length > 0) {
-        Currency
-          .remove({ name: req.params.name })
+        Currency.remove({ name: req.params.name })
           .exec()
           .then((currencyExistente) => {
             res.status(200).json({
@@ -119,40 +118,22 @@ exports.currency_delete_name = (req, res, next) => {
 };
 
 exports.currency_modify_value = (req, res, next) => {
-  Currency
-    .find({ name: req.params.name })
+  const name = req.params.name;
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+  Currency.find({ name: req.params.name });
+  Currency.update({ name: name }, { $set: updateOps })
     .exec()
-    .then((doc) => {
-      if (doc.length > 0) {
-        currencyEncontrada = doc;
-        console.log(doc);
-      } else {
-        return res.status(500).json({
-          message: "Currency not found",
-        });
-      }
-      Currency
-        .update(
-          { _id: currencyEncontrada._id },
-          { $set: { value: req.body.value } }
-        )
-        .exec()
-        .then((result) => {
-          console.log(result);
-          res.status(200).json({
-            message: "currency updated",
-          });
-        })
-        .catch((err) => {
-          res.status(500).json({
-            error: err,
-            message: "Update failed ",
-          });
-        });
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: "Restaurant Updated",
+      });
     })
     .catch((err) => {
-      res.status(500).json({
-        error: err,
-      });
+      console.log(err);
+      res.status(500).json({ error: err });
     });
 };
