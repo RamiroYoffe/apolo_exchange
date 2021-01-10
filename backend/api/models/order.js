@@ -17,6 +17,7 @@ const orderSchema = mongoose.Schema({
   amountRecieved: { type: Number, required: true },
   currencySent: { type: String, required: true },
   currencyRecieved: { type: String, required: true },
+  system: { type: String, required: true },
   time: { type: Date, default: Date.now },
 });
 
