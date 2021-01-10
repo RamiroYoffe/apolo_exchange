@@ -8,7 +8,7 @@ exports.currency_get_all = (req, res, next) => {
     .exec()
     .then((docs) => {
       const response = {
-         docs.map((doc) => {
+        currencies: docs.map((doc) => {
           return {
             doc,
           };
