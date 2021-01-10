@@ -1,5 +1,6 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 function NewOrder(props) {
 	const [name, setName] = useState('')
@@ -8,6 +9,7 @@ function NewOrder(props) {
 	const [mail, setMail] = useState('')
 	const [correctInfo, setCorrectInfo] = useState(0)
 	const { currencyA, amountA, currencyB, amountB } = props.transInfo
+	const history = useHistory()
 
 	function createOrder() {
 		if (name !== '' && cbu !== '' && cuil !== '' && correctInfo) {
@@ -26,6 +28,7 @@ function NewOrder(props) {
 				})
 				.then(function (response) {
 					console.log(response)
+					history.push(`/orderConfirmed`)
 				})
 				.catch(function (error) {
 					console.log(error)

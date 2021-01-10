@@ -7,8 +7,14 @@ import CurrencySelector from './CurrencySelector'
 function Calculator(props) {
 	const [amount, setAmount] = useState(0)
 	const [operation, setOperation] = useState('')
-	const [firstCurrency, setFirstCurrency] = useState('USD')
-	const [secondCurrency, setSecondCurrency] = useState('ARS')
+	const [firstCurrency, setFirstCurrency] = useState({
+		system: 'Paypal',
+		curr: 'USD',
+	})
+	const [secondCurrency, setSecondCurrency] = useState({
+		system: 'Transferencia',
+		curr: 'ARS',
+	})
 	const [info, setInfo] = useState([])
 
 	const secondAmount =
@@ -27,11 +33,11 @@ function Calculator(props) {
 		setOperation(currentOperation)
 	}
 
-	function handleSelectChange(currentCurrency, option) {
+	function handleSelectChange(currentSystem, currentCurrency, option) {
 		if (option === 1) {
-			setFirstCurrency(currentCurrency)
+			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
 		} else {
-			setSecondCurrency(currentCurrency)
+			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
 		}
 	}
 
@@ -54,8 +60,8 @@ function Calculator(props) {
 
 	function calcRate(buying) {
 		let rate = 0
-		const valueA = findCurrencyData(firstCurrency)
-		const valueB = findCurrencyData(secondCurrency)
+		const valueA = findCurrencyData(firstCurrency.system)
+		const valueB = findCurrencyData(secondCurrency.system)
 		if (buying) {
 			rate = valueA / valueB
 		} else {
@@ -64,9 +70,9 @@ function Calculator(props) {
 		return rate
 	}
 
-	function findCurrencyData(currName) {
+	function findCurrencyData(currSystem) {
 		for (const A in info) {
-			if (info[A].doc.name === currName) {
+			if (info[A].doc.system === currSystem) {
 				return info[A].doc.value
 			}
 		}
@@ -81,19 +87,25 @@ function Calculator(props) {
 	}
 
 	function liftState() {
-		props.setVisible(true)
 		props.updateValues(
 			firstAmount,
 			secondAmount,
 			firstCurrency,
 			secondCurrency
 		)
+		if (
+			firstAmount > 0 &&
+			secondAmount > 0 &&
+			firstCurrency.value !== secondCurrency.value
+		) {
+			props.setVisible(true)
+		}
 	}
 
 	return (
 		<div>
 			<fieldset>
-				<legend>Quiero vender: {firstCurrency}</legend>
+				<legend>Quiero vender: {firstCurrency.curr}</legend>
 				<CurrencyInput
 					operation='selling'
 					amount={firstAmount}
@@ -108,7 +120,7 @@ function Calculator(props) {
 			</fieldset>
 			<button onClick={switchCurrencies}>Switch</button>
 			<fieldset>
-				<legend>Quiero comprar: {secondCurrency}</legend>
+				<legend>Quiero comprar: {secondCurrency.curr}</legend>
 				<CurrencyInput
 					operation='buying'
 					amount={secondAmount}

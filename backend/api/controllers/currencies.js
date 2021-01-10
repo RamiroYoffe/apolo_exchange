@@ -45,7 +45,7 @@ exports.currency_get_one = (req, res, next) => {
 }
 
 exports.currency_get_system = (req, res, next) => {
-	Currency.find({ sistema: req.params.sistema })
+	Currency.find({ system: req.params.system })
 		.exec()
 		.then((docs) => {
 			const response = {
@@ -101,8 +101,7 @@ exports.currency_delete_name = (req, res, next) => {
 		.exec()
 		.then((currencyEncontrada) => {
 			if (currencyEncontrada.length > 0) {
-				currency
-					.remove({ name: req.params.name })
+				Currency.remove({ name: req.params.name })
 					.exec()
 					.then((currencyExistente) => {
 						res.status(200).json({
@@ -119,8 +118,8 @@ exports.currency_delete_name = (req, res, next) => {
 }
 
 exports.currency_modify_value = (req, res, next) => {
-	currency
-		.find({ name: req.params.name })
+	let currencyEncontrada
+	Currency.find({ name: req.params.name })
 		.exec()
 		.then((doc) => {
 			if (doc.length > 0) {
@@ -131,14 +130,49 @@ exports.currency_modify_value = (req, res, next) => {
 					message: 'Currency not found',
 				})
 			}
-			currency
-				.update(
-					{ _id: currencyEncontrada._id },
-					{ $set: { value: req.body.value } }
-				)
+			Currency.update(
+				{ _id: currencyEncontrada._id },
+				{ $set: { value: req.body.value } }
+			)
 				.exec()
 				.then((result) => {
 					console.log(result)
+					res.status(200).json({
+						message: 'currency updated',
+					})
+				})
+				.catch((err) => {
+					res.status(500).json({
+						error: err,
+						message: 'Update failed ',
+					})
+				})
+		})
+		.catch((err) => {
+			res.status(500).json({
+				error: err,
+			})
+		})
+}
+
+exports.currency_modify_value_byId = (req, res, next) => {
+	let currencyEncontrada
+	Currency.findById(req.params._id)
+		.exec()
+		.then((doc) => {
+			if (doc._id !== undefined) {
+				currencyEncontrada = doc
+			} else {
+				return res.status(500).json({
+					message: 'Currency not found',
+				})
+			}
+			Currency.update(
+				{ _id: currencyEncontrada._id },
+				{ $set: { visible: req.body.visible } }
+			)
+				.exec()
+				.then((result) => {
 					res.status(200).json({
 						message: 'currency updated',
 					})

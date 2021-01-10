@@ -1,12 +1,14 @@
 import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
-import Main from './components/Main'
+import Main from './components/pages/Main'
 import Navbar from './components/Navbar'
-import Manager from './components/Manager'
-import OrderList from './components/OrderList'
+import Manager from './components/pages/Manager'
+import OrderList from './components/pages/OrderList'
 import Order from './components/Order'
-import CurrencySettings from './components/CurrencySettings'
+import CurrencySettings from './components/pages/CurrencySettings'
+import NewCurrency from './components/NewCurrency'
+import OrderConfirmed from './components/pages/OrderConfirmed'
 
 function App() {
 	return (
@@ -15,10 +17,19 @@ function App() {
 
 			<Switch>
 				<Route exact path='/' component={Main} />
+				<Route exact path='/orderConfirmed' component={OrderConfirmed} />
 				<Route exact path='/manager' component={Manager} />
 				<Route exact path='/manager/orders' component={OrderList} />
-				<Route path='/manager/orders/:orderId' component={Order} />
-				<Route path='/manager/currency' component={CurrencySettings} />
+				<Route exact path='/manager/orders/:orderId' component={Order} />
+				<Route
+					exact
+					path='/manager/currency'
+					component={CurrencySettings}
+				/>
+				<Route
+					path='/manager/currency/:currencySystem'
+					component={NewCurrency}
+				/>
 			</Switch>
 		</div>
 	)

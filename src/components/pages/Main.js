@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
-import Calculator from './Calculator'
-import NewOrder from './NewOrder'
+import Calculator from '../Calculator'
+import NewOrder from '../NewOrder'
 
 function Main() {
 	const [transactionInfo, setTransctionInfo] = useState({
