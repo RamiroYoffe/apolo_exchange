@@ -140,6 +140,7 @@ exports.order_create = (req, res, next) => {
                 amountRecieved: req.body.amountRecieved,
                 currencySent: req.body.currencySent,
                 currencyRecieved: req.body.currencyRecieved,
+                system: req.body.system,
               });
               orden
                 .save()
@@ -192,6 +193,7 @@ exports.order_create = (req, res, next) => {
               amountRecieved: req.body.amountRecieved,
               currencySent: req.body.currencySent,
               currencyRecieved: req.body.currencyRecieved,
+              system: req.body.system,
             });
             orden
               .save()
