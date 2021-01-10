@@ -22,8 +22,10 @@ function NewOrder(props) {
 					mail: mail,
 					amountSent: amountA,
 					amountRecieved: amountB,
-					currencySent: currencyA,
-					currencyRecieved: currencyB,
+					currencySent: currencyA.curr,
+					currencyRecieved: currencyB.curr,
+					systemSent: currencyA.system,
+					systemRecieved: currencyB.system,
 				})
 				.then(function (response) {
 					console.log(response)
