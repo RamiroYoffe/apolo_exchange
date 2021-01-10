@@ -17,7 +17,7 @@ function OrderList() {
 				{ord.doc.currencySent} → {ord.doc.amountRecieved}{' '}
 				{ord.doc.currencyRecieved}
 			</h3>
-			<Link to={`/manager/orders/${ord.doc._id}`}>See order</Link>
+			<Link to={`/manager/orders/${ord.doc.orderNumber}`}>See order</Link>
 			<hr />
 		</div>
 	))

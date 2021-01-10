@@ -20,7 +20,7 @@ function App() {
 				<Route exact path='/orderConfirmed' component={OrderConfirmed} />
 				<Route exact path='/manager' component={Manager} />
 				<Route exact path='/manager/orders' component={OrderList} />
-				<Route exact path='/manager/orders/:orderId' component={Order} />
+				<Route exact path='/manager/orders/:orderNum' component={Order} />
 				<Route
 					exact
 					path='/manager/currency'

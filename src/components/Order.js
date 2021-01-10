@@ -15,13 +15,15 @@ function Order() {
 		currencySent: 'BTC',
 		currencyRecieved: 'ARG',
 	})
-	let { orderId } = useParams()
+	let { orderNum } = useParams()
 
 	useEffect(() => {
-		axios.get(`http://localhost:5000/order/${orderId}`).then((response) => {
-			setOrder(response.data.order)
-		})
-	}, [orderId])
+		axios
+			.get(`http://localhost:5000/order/number/${orderNum}`)
+			.then((response) => {
+				setOrder(response.data.Orders[0].doc)
+			})
+	}, [orderNum])
 
 	return (
 		<div>
