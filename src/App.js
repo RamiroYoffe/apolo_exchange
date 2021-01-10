@@ -1,25 +1,38 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react'
+import { Route, Switch } from 'react-router-dom'
+
+import Main from './components/pages/Main'
+import Navbar from './components/Navbar'
+import Manager from './components/pages/Manager'
+import OrderList from './components/pages/OrderList'
+import Order from './components/Order'
+import CurrencySettings from './components/pages/CurrencySettings'
+import NewCurrency from './components/NewCurrency'
+import OrderConfirmed from './components/pages/OrderConfirmed'
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<div>
+			<Navbar />
+
+			<Switch>
+				<Route exact path='/' component={Main} />
+				<Route exact path='/orderConfirmed' component={OrderConfirmed} />
+				<Route exact path='/manager' component={Manager} />
+				<Route exact path='/manager/orders' component={OrderList} />
+				<Route exact path='/manager/orders/:orderId' component={Order} />
+				<Route
+					exact
+					path='/manager/currency'
+					component={CurrencySettings}
+				/>
+				<Route
+					path='/manager/currency/:currencySystem'
+					component={NewCurrency}
+				/>
+			</Switch>
+		</div>
+	)
 }
 
-export default App;
+export default App
