@@ -2,7 +2,7 @@ import React from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Main from './components/pages/Main'
-import Navbar from './components/Navbar'
+import Navbar from './components/CustomNavbar'
 import Manager from './components/pages/Manager'
 import OrderList from './components/pages/OrderList'
 import Order from './components/Order'

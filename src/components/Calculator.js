@@ -3,6 +3,12 @@ import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import CurrencyInput from './CurrencyInput'
 import CurrencySelector from './CurrencySelector'
+import Button from 'react-bootstrap/Button'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Jumbotron from 'react-bootstrap/Jumbotron'
+import { Container } from 'react-bootstrap'
 
 function Calculator(props) {
 	const [amount, setAmount] = useState(0)
@@ -104,36 +110,67 @@ function Calculator(props) {
 
 	return (
 		<div>
-			<fieldset>
-				<legend>Quiero vender: {firstCurrency.curr}</legend>
-				<CurrencyInput
-					operation='selling'
-					amount={firstAmount}
-					onAmountChange={handleAmountChange}
-				/>
-				<CurrencySelector
-					currency={firstCurrency}
-					currencies={info}
-					option={1}
-					onSelectChange={handleSelectChange}
-				/>
-			</fieldset>
-			<button onClick={switchCurrencies}>Switch</button>
-			<fieldset>
-				<legend>Quiero comprar: {secondCurrency.curr}</legend>
-				<CurrencyInput
-					operation='buying'
-					amount={secondAmount}
-					onAmountChange={handleAmountChange}
-				/>
-				<CurrencySelector
-					currency={secondCurrency}
-					currencies={info}
-					option={2}
-					onSelectChange={handleSelectChange}
-				/>
-			</fieldset>
-			<button onClick={liftState}>Next</button>
+			<div
+				className='p-3 mb-2 bg-light'
+				style={{ width: '30vw', borderRadius: '10%' }}
+			>
+				<Form>
+					<Form.Group controlId='CustomSelect'>
+						<Form.Label>Quiero vender: {firstCurrency.curr}</Form.Label>
+						<Form.Row>
+							<Col sm='auto'>
+								<CurrencyInput
+									operation='selling'
+									amount={firstAmount}
+									onAmountChange={handleAmountChange}
+								/>
+							</Col>
+							<Col sm='auto'>
+								<CurrencySelector
+									currency={firstCurrency}
+									currencies={info}
+									option={1}
+									onSelectChange={handleSelectChange}
+								/>
+							</Col>
+						</Form.Row>
+					</Form.Group>
+					<Button
+						className='mb-2 mx-auto'
+						style={{
+							color: 'white',
+							backgroundColor: 'indigo',
+							borderRadius: '50%',
+						}}
+						onClick={switchCurrencies}
+					>
+						⇅
+					</Button>
+					<Form.Group controlId='CustomSelect2'>
+						<Form.Label>Quiero comprar: {secondCurrency.curr}</Form.Label>
+						<Form.Row>
+							<Col sm='auto'>
+								<CurrencyInput
+									operation='buying'
+									amount={secondAmount}
+									onAmountChange={handleAmountChange}
+								/>
+							</Col>
+							<Col sm='auto'>
+								<CurrencySelector
+									currency={secondCurrency}
+									currencies={info}
+									option={2}
+									onSelectChange={handleSelectChange}
+								/>
+							</Col>
+						</Form.Row>
+					</Form.Group>
+				</Form>
+			</div>
+			<Button className='mx-auto' onClick={liftState}>
+				Siguiente
+			</Button>
 		</div>
 	)
 }

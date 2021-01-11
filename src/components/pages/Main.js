@@ -16,10 +16,10 @@ function Main() {
 	}
 
 	return (
-		<div>
+		<>
 			<Calculator updateValues={updateValues} setVisible={setVisible} />
 			{visible ? <NewOrder transInfo={transactionInfo} /> : <h1> </h1>}
-		</div>
+		</>
 	)
 }
 

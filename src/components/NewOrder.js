@@ -1,6 +1,9 @@
 import axios from 'axios'
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
+import InputGroup from 'react-bootstrap/InputGroup'
+import Form from 'react-bootstrap/Form'
+import Button from 'react-bootstrap/Button'
 
 function NewOrder(props) {
 	const [name, setName] = useState('')
@@ -24,8 +27,7 @@ function NewOrder(props) {
 					amountRecieved: amountB,
 					currencySent: currencyA.curr,
 					currencyRecieved: currencyB.curr,
-					systemSent: currencyA.system,
-					systemRecieved: currencyB.system,
+					system: currencyA.system,
 				})
 				.then(function (response) {
 					console.log(response)
@@ -46,41 +48,59 @@ function NewOrder(props) {
 	}
 
 	return (
-		<div>
-			<fieldset>
-				<fieldset>
-					<legend>Tu nombre y apellido:</legend>
-					<input
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					></input>
-				</fieldset>
-				<fieldset>
-					<legend>Tu cbu:</legend>
-					<input
-						value={cbu}
-						onChange={(e) => setCbu(e.target.value)}
-					></input>
-				</fieldset>
-				<fieldset>
-					<legend>Tu cuil:</legend>
-					<input
-						value={cuil}
-						onChange={(e) => setCuil(e.target.value)}
-					></input>
-				</fieldset>
-				<fieldset>
-					<legend>Tu mail:</legend>
-					<input
+		<Form>
+			<Form.Group controlId='formBasicEmail'>
+				<Form.Label>Correo Electronico</Form.Label>
+				<InputGroup className='mb-3'>
+					<Form.Control
+						type='email'
 						value={mail}
 						onChange={(e) => validateEmail(e.target.value)}
-					></input>
-					{correctInfo === false ? <label>Invalid email</label> : ''}
-					{correctInfo === true ? '✓' : ''}
-				</fieldset>
-			</fieldset>
-			<button onClick={createOrder}>Create order</button>
-		</div>
+					/>
+					<InputGroup.Append>
+						{correctInfo === false ? (
+							<InputGroup.Text id='basic-addon1'>
+								Invalid email
+							</InputGroup.Text>
+						) : (
+							''
+						)}
+						{correctInfo === true ? (
+							<InputGroup.Text id='basic-addon1'>✓</InputGroup.Text>
+						) : (
+							''
+						)}
+					</InputGroup.Append>
+				</InputGroup>
+			</Form.Group>
+
+			<Form.Group controlId='formBasicName'>
+				<Form.Label>Nombre y Apellido</Form.Label>
+				<Form.Control
+					type='name'
+					value={name}
+					onChange={(e) => setName(e.target.value)}
+				/>
+			</Form.Group>
+			<Form.Group controlId='formBasicCuil'>
+				<Form.Label>CUIL</Form.Label>
+				<Form.Control
+					value={cuil}
+					onChange={(e) => setCuil(e.target.value)}
+				/>
+			</Form.Group>
+			<Form.Group controlId='formBasicCBU'>
+				<Form.Label>CBU</Form.Label>
+				<Form.Control
+					value={cbu}
+					onChange={(e) => setCbu(e.target.value)}
+				/>
+			</Form.Group>
+
+			<Button variant='primary' onClick={createOrder}>
+				Crear Orden
+			</Button>
+		</Form>
 	)
 }
 

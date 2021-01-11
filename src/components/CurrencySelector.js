@@ -1,8 +1,9 @@
 import React from 'react'
+import Form from 'react-bootstrap/Form'
 
 function CurrencySelector(props) {
 	const currencies = props.currencies.map((curr) => (
-		<optgroup label={curr.doc.name}>
+		<optgroup label={curr.doc.name} key={curr.doc.name}>
 			<option
 				key={curr.doc._id}
 				disabled={!curr.doc.visible}
@@ -30,11 +31,14 @@ function CurrencySelector(props) {
 	}
 
 	return (
-		<div>
-			<select value={props.currency.system} onChange={handleChange}>
-				{currencies}
-			</select>
-		</div>
+		<Form.Control
+			value={props.currency.system}
+			onChange={handleChange}
+			as='select'
+			custom
+		>
+			{currencies}
+		</Form.Control>
 	)
 }
 
