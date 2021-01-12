@@ -67,26 +67,26 @@ exports.order_get_mail = (req, res, next) => {
     });
 };
 
-exports.order_delete_orderNumber = (req, res, next) => {
-  Order.find({ orderNumber: req.params.orderNumber })
-    .exec()
-    .then((orderFound) => {
-      if (orderFound.length > 0) {
-        Order.remove({ orderNumber: req.params.orderNumber })
-          .exec()
-          .then((order) => {
-            res.status(200).json({
-              message: "Orden eliminada correctamente",
-              result: order,
-            });
-          });
-      } else {
-        return res.status(409).json({
-          message: "No existe la Orden",
-        });
-      }
-    });
-};
+// exports.order_delete_orderNumber = (req, res, next) => {
+//   Order.find({ orderNumber: req.params.orderNumber })
+//     .exec()
+//     .then((orderFound) => {
+//       if (orderFound.length > 0) {
+//         Order.remove({ orderNumber: req.params.orderNumber })
+//           .exec()
+//           .then((order) => {
+//             res.status(200).json({
+//               message: "Orden eliminada correctamente",
+//               result: order,
+//             });
+//           });
+//       } else {
+//         return res.status(409).json({
+//           message: "No existe la Orden",
+//         });
+//       }
+//     });
+// };
 
 exports.order_create = (req, res, next) => {
   Order.find()

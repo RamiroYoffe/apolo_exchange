@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const currencySchema = mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
+  code: { type: String, required: true },
   name: { type: String, required: true },
   system: { type: String, requirded: true },
   value: { type: Number, required: true },
