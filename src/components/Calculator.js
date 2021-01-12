@@ -6,9 +6,6 @@ import CurrencySelector from './CurrencySelector'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
-import Row from 'react-bootstrap/Row'
-import Jumbotron from 'react-bootstrap/Jumbotron'
-import { Container } from 'react-bootstrap'
 
 function Calculator(props) {
 	const [amount, setAmount] = useState(0)
@@ -22,6 +19,7 @@ function Calculator(props) {
 		curr: 'ARS',
 	})
 	const [info, setInfo] = useState([])
+	console.log(operation)
 
 	const secondAmount =
 		operation === 'selling' ? convertTo(amount, toSecond) : amount
@@ -125,8 +123,10 @@ function Calculator(props) {
 									onAmountChange={handleAmountChange}
 								/>
 							</Col>
-							<Col sm='auto'>
+							<Col sm='5'>
 								<CurrencySelector
+									amount={secondAmount}
+									otherValue={findCurrencyData(secondCurrency.system)}
 									currency={firstCurrency}
 									currencies={info}
 									option={1}
@@ -156,8 +156,10 @@ function Calculator(props) {
 									onAmountChange={handleAmountChange}
 								/>
 							</Col>
-							<Col sm='auto'>
+							<Col sm='5'>
 								<CurrencySelector
+									amount={firstAmount}
+									otherValue={findCurrencyData(firstCurrency.system)}
 									currency={secondCurrency}
 									currencies={info}
 									option={2}
