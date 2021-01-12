@@ -1,11 +1,12 @@
-const mongoose = require('mongoose')
+const mongoose = require("mongoose");
 
 const currencySchema = mongoose.Schema({
-	_id: mongoose.Schema.Types.ObjectId,
-	name: { type: String, required: true, unique: false },
-	system: { type: String, requirded: true },
-	value: { type: Number, required: true },
-	visible: { type: Boolean, required: true },
-})
+  _id: mongoose.Schema.Types.ObjectId,
+  code: { type: String, required: true },
+  name: { type: String, required: true },
+  system: { type: String, requirded: true },
+  value: { type: Number, required: true },
+  visible: { type: Boolean, required: true },
+});
 
-module.exports = mongoose.model('Currency', currencySchema) //El model es el constructor
+module.exports = mongoose.model("Currency", currencySchema); //El model es el constructor
