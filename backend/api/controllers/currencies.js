@@ -45,7 +45,7 @@ exports.currency_get_one = (req, res, next) => {
 };
 
 exports.currency_get_system = (req, res, next) => {
-  Currency.find({ sistema: req.params.sistema })
+  Currency.find({ system: req.params.system })
     .exec()
     .then((docs) => {
       const response = {
@@ -78,21 +78,37 @@ exports.currency_create = (req, res, next) => {
         //crear la currency nueva
         const currency = new Currency({
           _id: new mongoose.Types.ObjectId(),
+          code: req.body.code,
           name: req.body.name,
           value: req.body.value,
           system: req.body.system,
           visible: true,
         });
-        currency.save().then((result) => {
-          res.status(201).json({
-            message: "Currency succesfully added",
-            name: result.name,
-            value: result.value,
-            system: result.system,
-            visible: result.visible,
+        currency
+          .save()
+          .then((result) => {
+            res.status(201).json({
+              message: "Currency succesfully added",
+              name: result.name,
+              code: result.code,
+              value: result.value,
+              system: result.system,
+              visible: result.visible,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+              error: err,
+            });
           });
-        });
       }
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
     });
 };
 
@@ -107,6 +123,12 @@ exports.currency_delete_name = (req, res, next) => {
             res.status(200).json({
               message: "currency succesfully eliminated",
               result: currencyExistente,
+            });
+          })
+          .catch((err) => {
+            console.log(err);
+            res.status(500).json({
+              error: err,
             });
           });
       } else {
@@ -135,5 +157,67 @@ exports.currency_modify_value = (req, res, next) => {
     .catch((err) => {
       console.log(err);
       res.status(500).json({ error: err });
+    });
+};
+
+exports.currency_modify_value = (req, res, next) => {
+  const name = req.params.name;
+  const updateOps = {};
+  for (const ops of req.body) {
+    updateOps[ops.propName] = ops.value;
+  }
+  Currency.find({ name: req.params.name });
+  Currency.update({ name: name }, { $set: updateOps })
+    .exec()
+    .then((result) => {
+      console.log(result);
+      res.status(200).json({
+        message: "Currency Updated",
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+};
+exports.currency_get_code = (req, res, next) => {
+  Currency.find({ code: req.params.code })
+    .exec()
+    .then((docs) => {
+      const response = {
+        currencies: docs.map((doc) => {
+          return {
+            doc,
+          };
+        }),
+      };
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.currency_get_id = (req, res, next) => {
+  Currency.find({ _id: req.params.id })
+    .exec()
+    .then((docs) => {
+      const response = {
+        currencies: docs.map((doc) => {
+          return {
+            doc,
+          };
+        }),
+      };
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
     });
 };
