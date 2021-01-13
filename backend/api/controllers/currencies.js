@@ -129,7 +129,7 @@ exports.currency_modify_value = (req, res, next) => {
     .then((result) => {
       console.log(result);
       res.status(200).json({
-        message: "Restaurant Updated",
+        message: "Currency Updated",
       });
     })
     .catch((err) => {

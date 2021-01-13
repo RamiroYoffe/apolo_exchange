@@ -39,8 +39,10 @@ function Calculator(props) {
 
 	function handleSelectChange(currentSystem, currentCurrency, option) {
 		if (option === 1) {
+			setOperation('buying')
 			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
 		} else {
+			setOperation('selling')
 			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
 		}
 	}
@@ -131,6 +133,7 @@ function Calculator(props) {
 									currencies={info}
 									option={1}
 									onSelectChange={handleSelectChange}
+									changeOperation={setOperation}
 								/>
 							</Col>
 						</Form.Row>
@@ -164,6 +167,7 @@ function Calculator(props) {
 									currencies={info}
 									option={2}
 									onSelectChange={handleSelectChange}
+									changeOperation={setOperation}
 								/>
 							</Col>
 						</Form.Row>
