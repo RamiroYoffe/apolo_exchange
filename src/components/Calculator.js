@@ -19,7 +19,6 @@ function Calculator(props) {
 		curr: 'ARS',
 	})
 	const [info, setInfo] = useState([])
-	console.log(operation)
 
 	const secondAmount =
 		operation === 'selling' ? convertTo(amount, toSecond) : amount
