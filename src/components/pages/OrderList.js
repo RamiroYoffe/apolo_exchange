@@ -39,7 +39,7 @@ function OrderList() {
 						<th>#</th>
 						<th>Nombre</th>
 						<th>Email</th>
-						<th>Transaccion</th>
+						<th>transacción</th>
 					</tr>
 				</thead>
 				{orders}
