@@ -8,8 +8,8 @@ import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
 
 function Calculator(props) {
-	const [amount, setAmount] = useState(0)
-	const [operation, setOperation] = useState('')
+	const [firstAmount, setFirstAmount] = useState(0)
+	const [secondAmount, setSecondAmount] = useState(0)
 	const [firstCurrency, setFirstCurrency] = useState({
 		system: 'paypal',
 		curr: 'USD',
@@ -20,75 +20,77 @@ function Calculator(props) {
 	})
 	const [info, setInfo] = useState([])
 
-	const secondAmount =
-		operation === 'selling' ? convertTo(amount, toSecond) : amount
-	const firstAmount =
-		operation === 'buying' ? convertTo(amount, toFirst) : amount
-
 	useEffect(() => {
 		axios.get('http://localhost:5000/currency').then((response) => {
 			setInfo(response.data.currencies)
 		})
 	}, [])
 
-	function handleAmountChange(currentAmount, currentOperation) {
-		setAmount(currentAmount)
-		setOperation(currentOperation)
-	}
-
-	function handleSelectChange(currentSystem, currentCurrency, option) {
-		if (option === 1) {
-			setOperation('buying')
-			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
+	function handleAmountChange(currentAmount, currOption) {
+		if (currOption === 1) {
+			setFirstAmount(currentAmount)
+			setSecondAmount(
+				convertTo(
+					currentAmount,
+					secondCurrency.system,
+					firstCurrency.system
+				)
+			)
 		} else {
-			setOperation('selling')
-			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
+			setFirstAmount(
+				convertTo(
+					currentAmount,
+					firstCurrency.system,
+					secondCurrency.system
+				)
+			)
+			setSecondAmount(currentAmount)
 		}
 	}
 
-	function convertTo(amount, convert) {
+	function handleSelectChange(
+		currentSystem,
+		currentCurrency,
+		option,
+		newAmount
+	) {
+		if (option === 1) {
+			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
+			setFirstAmount(newAmount)
+		} else {
+			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
+			setSecondAmount(newAmount)
+		}
+	}
+
+	function convertTo(amount, currSystem, otherCurrValue) {
 		const input = parseFloat(amount)
 		if (Number.isNaN(input)) {
 			return ''
 		}
-		const output = convert(input)
+		const output =
+			(amount * findCurrencyData(otherCurrValue, 'v')) /
+			findCurrencyData(currSystem, 'v')
 		return output
 	}
 
-	function toSecond(firstAmount) {
-		return firstAmount * calcRate(true)
-	}
-
-	function toFirst(secondAmount) {
-		return secondAmount * calcRate(false)
-	}
-
-	function calcRate(buying) {
-		let rate = 0
-		const valueA = findCurrencyData(firstCurrency.system)
-		const valueB = findCurrencyData(secondCurrency.system)
-		if (buying) {
-			rate = valueA / valueB
-		} else {
-			rate = valueB / valueA
-		}
-		return rate
-	}
-
-	function findCurrencyData(currSystem) {
+	function findCurrencyData(currSystem, searchFor) {
 		for (const A in info) {
 			if (info[A].doc.system === currSystem) {
-				return info[A].doc.value
+				if (searchFor === 'n') {
+					return info[A].doc.name
+				} else if (searchFor === 'v') {
+					return info[A].doc.value
+				}
 			}
 		}
 	}
 
 	function switchCurrencies() {
-		const valueA = firstCurrency
-		const valueB = secondCurrency
-		setFirstCurrency(valueB)
-		setSecondCurrency(valueA)
-		setAmount(firstAmount)
+		const amountA = firstAmount
+		const amountB = secondAmount
+		setFirstAmount(amountB)
+		setSecondAmount(amountA)
 	}
 
 	function liftState() {
@@ -119,7 +121,7 @@ function Calculator(props) {
 						<Form.Row>
 							<Col sm='auto'>
 								<CurrencyInput
-									operation='selling'
+									option={1}
 									amount={firstAmount}
 									onAmountChange={handleAmountChange}
 								/>
@@ -127,12 +129,13 @@ function Calculator(props) {
 							<Col sm='5'>
 								<CurrencySelector
 									amount={secondAmount}
-									otherValue={findCurrencyData(secondCurrency.system)}
-									currency={firstCurrency}
+									value={firstCurrency}
 									currencies={info}
 									option={1}
 									onSelectChange={handleSelectChange}
-									changeOperation={setOperation}
+									otherCurrencyValue={secondCurrency.system}
+									convertTo={convertTo}
+									findCurrencyData={findCurrencyData}
 								/>
 							</Col>
 						</Form.Row>
@@ -153,7 +156,7 @@ function Calculator(props) {
 						<Form.Row>
 							<Col sm='auto'>
 								<CurrencyInput
-									operation='buying'
+									option={2}
 									amount={secondAmount}
 									onAmountChange={handleAmountChange}
 								/>
@@ -161,12 +164,13 @@ function Calculator(props) {
 							<Col sm='5'>
 								<CurrencySelector
 									amount={firstAmount}
-									otherValue={findCurrencyData(firstCurrency.system)}
-									currency={secondCurrency}
+									value={secondCurrency}
 									currencies={info}
 									option={2}
 									onSelectChange={handleSelectChange}
-									changeOperation={setOperation}
+									otherCurrencyValue={firstCurrency.system}
+									convertTo={convertTo}
+									findCurrencyData={findCurrencyData}
 								/>
 							</Col>
 						</Form.Row>

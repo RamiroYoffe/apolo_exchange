@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 function CurrencySelector(props) {
-	const [selectedOpt, setSelectedOpt] = useState(props.currency.system)
+	const [selectedOpt, setSelectedOpt] = useState(props.value.system)
 
 	const currencies = props.currencies.map((curr) => (
 		<optgroup label={curr.doc.name} key={curr.doc.name}>
@@ -13,9 +13,11 @@ function CurrencySelector(props) {
 			>
 				{curr.doc.system === selectedOpt
 					? curr.doc.system
-					: `${convertTo(props.amount, curr.doc.system)} ${
-							curr.doc.system
-					  }`}
+					: `${props.convertTo(
+							props.amount,
+							curr.doc.system,
+							props.otherCurrencyValue
+					  )} ${curr.doc.system}`}
 			</option>
 		</optgroup>
 	))
@@ -24,36 +26,15 @@ function CurrencySelector(props) {
 		setSelectedOpt(e.target.value)
 		props.onSelectChange(
 			e.target.value,
-			findCurrencyData(e.target.value, 'n'),
-			props.option
+			props.findCurrencyData(e.target.value, 'n'),
+			props.option,
+			props.convertTo(props.amount, e.target.value, props.otherCurrencyValue)
 		)
-	}
-
-	function findCurrencyData(currSystem, searchFor) {
-		for (const A in props.currencies) {
-			if (props.currencies[A].doc.system === currSystem) {
-				if (searchFor === 'n') {
-					return props.currencies[A].doc.name
-				} else if (searchFor === 'v') {
-					return props.currencies[A].doc.value
-				}
-			}
-		}
-	}
-
-	function convertTo(amount, currSystem) {
-		const input = parseFloat(amount)
-		if (Number.isNaN(input)) {
-			return ''
-		}
-		const output =
-			(props.otherValue / findCurrencyData(currSystem, 'v')) * amount
-		return output
 	}
 
 	return (
 		<Form.Control
-			value={props.currency.system}
+			value={selectedOpt}
 			onChange={handleChange}
 			as='select'
 			custom
