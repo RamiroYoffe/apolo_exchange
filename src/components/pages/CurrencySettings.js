@@ -18,6 +18,7 @@ function CurrencySettings() {
 				<th>{curr.doc.visible ? 'Disponible' : 'No Disponible'}</th>
 				<th>
 					<Button
+						size='sm'
 						onClick={() => {
 							let visiblent = !curr.doc.visible
 							axios
@@ -45,8 +46,8 @@ function CurrencySettings() {
 					</Button>
 				</th>
 				<th>
-					<LinkContainer to={`/manager/currency/${curr.doc.system}`}>
-						<Button>Editar</Button>
+					<LinkContainer to={`/manager/currency/edit/${curr.doc.system}`}>
+						<Button size='sm'>Editar</Button>
 					</LinkContainer>
 				</th>
 			</tr>
@@ -62,17 +63,20 @@ function CurrencySettings() {
 	return (
 		<>
 			<h3>Monedas:</h3>
-			<Table striped bordered hover size='sm'>
+			<Table striped bordered hover size='sm' responsive>
 				<thead>
 					<tr>
-						<th>#</th>
+						<th>Sistema</th>
 						<th>Nombre</th>
 						<th>Email</th>
-						<th>Transaccion</th>
+						<th>Disponible</th>
 					</tr>
 				</thead>
 				{currencies}
 			</Table>
+			<LinkContainer to={`/manager/currency/edit/new`}>
+				<Button>Crear nueva Moneda</Button>
+			</LinkContainer>
 		</>
 	)
 }

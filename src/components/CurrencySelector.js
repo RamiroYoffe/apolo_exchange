@@ -2,44 +2,49 @@ import React, { useState } from 'react'
 import Form from 'react-bootstrap/Form'
 
 function CurrencySelector(props) {
-	const [selectedOpt, setSelectedOpt] = useState(props.value.system)
-
-	const currencies = props.currencies.map((curr) => (
-		<optgroup label={curr.doc.name} key={curr.doc.name}>
+	const systems = props.systems.map((curr) => (
+		<optgroup label={curr.doc.currency} key={curr.doc.currency}>
 			<option
 				key={curr.doc._id}
-				disabled={!curr.doc.visible}
-				value={curr.doc.system}
+				disabled={!curr.doc.visible || curr.doc.name === props.otherSystem}
+				value={curr.doc.name}
 			>
-				{curr.doc.system === selectedOpt
-					? curr.doc.system
+				{curr.doc.name === props.value ||
+				curr.doc.name === props.otherSystem
+					? curr.doc.name
 					: `${props.convertTo(
 							props.amount,
-							curr.doc.system,
-							props.otherCurrencyValue
-					  )} ${curr.doc.system}`}
+							props.otherSystem,
+							curr.doc.name
+					  )} ${curr.doc.currency} | ${curr.doc.name}`}
 			</option>
 		</optgroup>
 	))
 
 	function handleChange(e) {
-		setSelectedOpt(e.target.value)
 		props.onSelectChange(
 			e.target.value,
-			props.findCurrencyData(e.target.value, 'n'),
-			props.option,
-			props.convertTo(props.amount, e.target.value, props.otherCurrencyValue)
+			findCurrencyData(e.target.value),
+			props.option
 		)
+	}
+
+	function findCurrencyData(system) {
+		for (const i in props.systems) {
+			if (props.systems[i].doc.name === system) {
+				return props.systems[i].doc.currency
+			}
+		}
 	}
 
 	return (
 		<Form.Control
-			value={selectedOpt}
+			value={props.value}
 			onChange={handleChange}
 			as='select'
 			custom
 		>
-			{currencies}
+			{systems}
 		</Form.Control>
 	)
 }

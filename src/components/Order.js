@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import axios from 'axios'
+import Form from 'react-bootstrap/Form'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Button from 'react-bootstrap/Button'
 
 function Order() {
 	const [order, setOrder] = useState({
@@ -15,6 +19,7 @@ function Order() {
 		currencySent: 'BTC',
 		currencyRecieved: 'ARG',
 	})
+	const [readOnly, setReadOnly] = useState(true)
 	let { orderNum } = useParams()
 
 	useEffect(() => {
@@ -25,19 +30,82 @@ function Order() {
 			})
 	}, [orderNum])
 
+	function enableEdit() {
+		setReadOnly(false)
+	}
+
 	return (
-		<div>
-			<h1>Numero de orden: {order.orderNumber}</h1>
-			<br />
-			<h3>Creada por: {order.account_name}</h3>
-			<h4>CBU:{order.cbu}</h4>
-			<h4>CUIL:{order.cuil}</h4>
-			<h4>Mail:{order.mail}</h4>
-			<h4>
-				{order.amountSent} {order.currencySent} → {order.amountRecieved}{' '}
-				{order.currencyRecieved}
-			</h4>
-		</div>
+		<Form>
+			<Form.Group as={Row} controlId='formPlaintextEmail'>
+				<Form.Label column sm='2'>
+					Email
+				</Form.Label>
+				<Col sm='10'>
+					<Form.Control readOnly={readOnly} defaultValue={order.mail} />
+				</Col>
+			</Form.Group>
+			<Form.Group as={Row} controlId='formPlaintextEmail'>
+				<Form.Label column sm='2'>
+					Nombre y Apellido
+				</Form.Label>
+				<Col sm='10'>
+					<Form.Control
+						readOnly={readOnly}
+						defaultValue={order.user_name}
+					/>
+				</Col>
+			</Form.Group>
+			<Form.Group as={Row} controlId='formPlaintextEmail'>
+				<Form.Label column sm='2'>
+					CUIL
+				</Form.Label>
+				<Col sm='10'>
+					<Form.Control readOnly={readOnly} defaultValue={order.cuil} />
+				</Col>
+			</Form.Group>
+			<Form.Group as={Row} controlId='formPlaintextEmail'>
+				<Form.Label column sm='2'>
+					CBU
+				</Form.Label>
+				<Col sm='10'>
+					<Form.Control readOnly={readOnly} defaultValue={order.cbu} />
+				</Col>
+			</Form.Group>
+			<Form.Group as={Row} controlId='formBasicUSDValue'>
+				<Form.Label column sm='2'>
+					Cambio
+				</Form.Label>
+				<Col sm='2'>
+					<Form.Control
+						readOnly={readOnly}
+						defaultValue={order.amountSent}
+					/>
+				</Col>
+				<Col sm='2'>
+					<Form.Control
+						readOnly={readOnly}
+						defaultValue={order.currencySent}
+					/>
+				</Col>
+				→
+				<Col sm='2'>
+					<Form.Control
+						readOnly={readOnly}
+						defaultValue={order.amountRecieved}
+					/>
+				</Col>
+				<Col sm='2'>
+					<Form.Control
+						readOnly={readOnly}
+						defaultValue={order.currencyRecieved}
+					/>
+				</Col>
+			</Form.Group>
+			<Button variant='primary' onClick={enableEdit}>
+				Editar Orden
+			</Button>
+			{readOnly ? '' : <Button variant='primary'>Guardar Orden</Button>}
+		</Form>
 	)
 }
 

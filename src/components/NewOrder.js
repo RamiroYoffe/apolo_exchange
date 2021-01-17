@@ -29,6 +29,7 @@ function NewOrder(props) {
 					currencyRecieved: currencyB.curr,
 					systemSent: currencyA.system,
 					systemRecieved: currencyB.system,
+					status: 'A realizar',
 				})
 				.then(function (response) {
 					console.log(response)

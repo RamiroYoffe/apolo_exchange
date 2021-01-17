@@ -21,9 +21,10 @@ function OrderList() {
 					{ord.doc.amountSent} {ord.doc.currencySent} →{' '}
 					{ord.doc.amountRecieved} {ord.doc.currencyRecieved}
 				</th>
+				<th>{ord.doc.status}</th>
 				<th>
 					<Link to={`/manager/orders/${ord.doc.orderNumber}`}>
-						See order
+						Ver Orden
 					</Link>
 				</th>
 			</tr>
@@ -32,14 +33,15 @@ function OrderList() {
 
 	return (
 		<>
-			<h3>Order List</h3>
+			<h3>Lista de ordenes</h3>
 			<Table striped bordered hover size='sm'>
 				<thead>
 					<tr>
 						<th>#</th>
 						<th>Nombre</th>
 						<th>Email</th>
-						<th>transacción</th>
+						<th>Transacción</th>
+						<th>Status</th>
 					</tr>
 				</thead>
 				{orders}

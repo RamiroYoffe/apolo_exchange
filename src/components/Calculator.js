@@ -19,11 +19,25 @@ function Calculator(props) {
 		curr: 'ARS',
 	})
 	const [info, setInfo] = useState([])
+	const [transactionInfo, setTransactionInfo] = useState([])
 
 	useEffect(() => {
-		axios.get('http://localhost:5000/currency').then((response) => {
-			setInfo(response.data.currencies)
-		})
+		axios
+			.get('http://localhost:5000/transaction')
+			.then((response) => {
+				setTransactionInfo(response.data.Transactions)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+		axios
+			.get('http://localhost:5000/system')
+			.then((response) => {
+				setInfo(response.data.Systems)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
 	}, [])
 
 	function handleAmountChange(currentAmount, currOption) {
@@ -32,79 +46,78 @@ function Calculator(props) {
 			setSecondAmount(
 				convertTo(
 					currentAmount,
-					secondCurrency.system,
-					firstCurrency.system
+					firstCurrency.system,
+					secondCurrency.system
 				)
 			)
-		} else {
+		} else if (currOption === 2) {
 			setFirstAmount(
 				convertTo(
 					currentAmount,
-					firstCurrency.system,
-					secondCurrency.system
+					secondCurrency.system,
+					firstCurrency.system
 				)
 			)
 			setSecondAmount(currentAmount)
 		}
 	}
 
-	function handleSelectChange(
-		currentSystem,
-		currentCurrency,
-		option,
-		newAmount
-	) {
+	function handleSelectChange(currentSystem, currentCurrency, option) {
 		if (option === 1) {
 			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
-			setFirstAmount(newAmount)
+			setFirstAmount(
+				convertTo(secondAmount, secondCurrency.system, currentSystem)
+			)
 		} else {
 			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
-			setSecondAmount(newAmount)
+			setSecondAmount(
+				convertTo(firstAmount, firstCurrency.system, currentSystem)
+			)
 		}
 	}
 
-	function convertTo(amount, currSystem, otherCurrValue) {
+	function convertTo(amount, thisSystem, otherSystem) {
 		const input = parseFloat(amount)
 		if (Number.isNaN(input)) {
 			return ''
 		}
-		const output =
-			(amount * findCurrencyData(otherCurrValue, 'v')) /
-			findCurrencyData(currSystem, 'v')
+
+		const output = amount * findCurrencyData(thisSystem, otherSystem)
 		return output
 	}
 
-	function findCurrencyData(currSystem, searchFor) {
-		for (const A in info) {
-			if (info[A].doc.system === currSystem) {
-				if (searchFor === 'n') {
-					return info[A].doc.name
-				} else if (searchFor === 'v') {
-					return info[A].doc.value
-				}
+	function findCurrencyData(firstSystem, secondSystem) {
+		for (const i in transactionInfo) {
+			if (
+				transactionInfo[i].doc.system1 === firstSystem &&
+				transactionInfo[i].doc.system2 === secondSystem
+			) {
+				return transactionInfo[i].doc.value
 			}
 		}
 	}
 
 	function switchCurrencies() {
-		const amountA = firstAmount
-		const amountB = secondAmount
-		setFirstAmount(amountB)
-		setSecondAmount(amountA)
+		const currA = firstCurrency
+		const currB = secondCurrency
+		setFirstCurrency({ system: currB.system, curr: currB.curr })
+		setSecondCurrency({ system: currA.system, curr: currA.curr })
+		setFirstAmount(secondAmount)
+		setSecondAmount(convertTo(secondAmount, currB.system, currA.system))
 	}
 
 	function liftState() {
-		props.updateValues(
-			firstAmount,
-			secondAmount,
-			firstCurrency,
-			secondCurrency
-		)
 		if (
 			firstAmount > 0 &&
 			secondAmount > 0 &&
 			firstCurrency.curr !== secondCurrency.curr
 		) {
+			props.updateValues(
+				firstAmount,
+				secondAmount,
+				firstCurrency,
+				secondCurrency
+			)
 			props.setVisible(true)
 		}
 	}
@@ -128,14 +141,13 @@ function Calculator(props) {
 							</Col>
 							<Col sm='5'>
 								<CurrencySelector
+									systems={info}
 									amount={secondAmount}
-									value={firstCurrency}
-									currencies={info}
 									option={1}
+									value={firstCurrency.system}
+									otherSystem={secondCurrency.system}
 									onSelectChange={handleSelectChange}
-									otherCurrencyValue={secondCurrency.system}
 									convertTo={convertTo}
-									findCurrencyData={findCurrencyData}
 								/>
 							</Col>
 						</Form.Row>
@@ -163,14 +175,13 @@ function Calculator(props) {
 							</Col>
 							<Col sm='5'>
 								<CurrencySelector
-									amount={firstAmount}
-									value={secondCurrency}
-									currencies={info}
+									systems={info}
 									option={2}
+									amount={firstAmount}
+									value={secondCurrency.system}
+									otherSystem={firstCurrency.system}
 									onSelectChange={handleSelectChange}
-									otherCurrencyValue={firstCurrency.system}
 									convertTo={convertTo}
-									findCurrencyData={findCurrencyData}
 								/>
 							</Col>
 						</Form.Row>

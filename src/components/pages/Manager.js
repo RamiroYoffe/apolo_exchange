@@ -4,8 +4,9 @@ import { Link } from 'react-router-dom'
 function Manager() {
 	return (
 		<div>
-			<Link to='/manager/orders'>Orders</Link>
-			<Link to='/manager/currency'>Currency Settings</Link>
+			<Link to='/manager/orders'>Gestion de ordenes</Link>
+			<br />
+			<Link to='/manager/currency'>Gestion de monedas</Link>
 		</div>
 	)
 }

@@ -9,10 +9,13 @@ function CustomNavbar() {
 			<Navbar.Brand href='/'>Apolo Exchange</Navbar.Brand>
 			<Nav className='mr-auto'>
 				<LinkContainer to='/'>
-					<Nav.Link>Home</Nav.Link>
+					<Nav.Link>Inicio</Nav.Link>
 				</LinkContainer>
 				<LinkContainer to='/manager'>
-					<Nav.Link>Settings</Nav.Link>
+					<Nav.Link>Configuracion</Nav.Link>
+				</LinkContainer>
+				<LinkContainer to='/user/new'>
+					<Nav.Link>Mi Cuenta</Nav.Link>
 				</LinkContainer>
 			</Nav>
 		</Navbar>
