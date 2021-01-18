@@ -4,15 +4,15 @@ import NewOrder from '../NewOrder'
 
 function Main() {
 	const [transactionInfo, setTransctionInfo] = useState({
-		firstCurrency: 'USD',
 		firstAmount: 0,
-		secondCurrency: 'ARS',
 		secondAmount: 0,
+		firstSystem: 'USD',
+		secondSystem: 'ARS',
 	})
 	const [visible, setVisible] = useState(false)
 
-	function updateValues(amountA, amountB, currencyA, currencyB) {
-		setTransctionInfo({ currencyA, amountA, currencyB, amountB })
+	function updateValues(amountA, amountB, systemA, systemB) {
+		setTransctionInfo({ amountA, amountB, systemA, systemB })
 	}
 
 	return (

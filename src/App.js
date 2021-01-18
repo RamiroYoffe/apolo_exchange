@@ -6,8 +6,8 @@ import CustomNavbar from './components/CustomNavbar'
 import Manager from './components/pages/Manager'
 import OrderList from './components/pages/OrderList'
 import Order from './components/Order'
-import CurrencySettings from './components/pages/CurrencySettings'
-import NewCurrency from './components/NewCurrency'
+import SystemsSettings from './components/pages/SystemsSettings'
+import NewSystem from './components/NewSystem'
 import OrderConfirmed from './components/pages/OrderConfirmed'
 import UserPage from './components/pages/UserPage'
 import LogIn from './components/pages/LogIn'
@@ -18,9 +18,7 @@ import { AuthContext } from './components/AuthContext'
 function App() {
 	const authContext = useContext(AuthContext)
 
-	useEffect(() => {
-		
-	}, [])
+	useEffect(() => {}, [])
 
 	return (
 		<>
@@ -34,14 +32,10 @@ function App() {
 				<Route exact path='/manager' component={Manager} />
 				<Route exact path='/manager/orders' component={OrderList} />
 				<Route exact path='/manager/orders/:orderNum' component={Order} />
+				<Route exact path='/manager/systems' component={SystemsSettings} />
 				<Route
-					exact
-					path='/manager/currency'
-					component={CurrencySettings}
-				/>
-				<Route
-					path='/manager/currency/edit/:currencySystem'
-					component={NewCurrency}
+					path='/manager/systems/edit/:systemName'
+					component={NewSystem}
 				/>
 			</Switch>
 		</>

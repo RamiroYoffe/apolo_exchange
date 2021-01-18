@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import Form from 'react-bootstrap/Form'
 
 function CurrencySelector(props) {
@@ -22,17 +22,13 @@ function CurrencySelector(props) {
 	))
 
 	function handleChange(e) {
-		props.onSelectChange(
-			e.target.value,
-			findCurrencyData(e.target.value),
-			props.option
-		)
+		props.onSelectChange(findCurrencyData(e.target.value), props.option)
 	}
 
 	function findCurrencyData(system) {
 		for (const i in props.systems) {
 			if (props.systems[i].doc.name === system) {
-				return props.systems[i].doc.currency
+				return props.systems[i].doc
 			}
 		}
 	}

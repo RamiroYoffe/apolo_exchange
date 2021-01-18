@@ -11,7 +11,8 @@ function NewOrder(props) {
 	const [cuil, setCuil] = useState('')
 	const [mail, setMail] = useState('')
 	const [correctInfo, setCorrectInfo] = useState(0)
-	const { currencyA, amountA, currencyB, amountB } = props.transInfo
+	const { amountA, amountB, systemA, systemB } = props.transInfo
+	const fields = [...systemA.fields, ...systemB.fields]
 	const history = useHistory()
 
 	function createOrder() {
@@ -25,10 +26,10 @@ function NewOrder(props) {
 					mail: mail,
 					amountSent: amountA,
 					amountRecieved: amountB,
-					currencySent: currencyA.curr,
-					currencyRecieved: currencyB.curr,
-					systemSent: currencyA.system,
-					systemRecieved: currencyB.system,
+					currencySent: systemA.currency,
+					currencyRecieved: systemB.currency,
+					systemSent: systemA.name,
+					systemRecieved: systemB.name,
 					status: 'A realizar',
 				})
 				.then(function (response) {
@@ -51,53 +52,72 @@ function NewOrder(props) {
 
 	return (
 		<Form>
-			<Form.Group controlId='formBasicEmail'>
-				<Form.Label>Correo Electronico</Form.Label>
-				<InputGroup className='mb-3'>
+			{fields.includes('mail') ? (
+				<Form.Group controlId='formBasicEmail'>
+					<Form.Label>Correo Electronico</Form.Label>
+					<InputGroup className='mb-3'>
+						<Form.Control
+							type='email'
+							value={mail}
+							onChange={(e) => validateEmail(e.target.value)}
+						/>
+						<InputGroup.Append>
+							{correctInfo === false ? (
+								<InputGroup.Text id='basic-addon1'>
+									Invalid email
+								</InputGroup.Text>
+							) : (
+								''
+							)}
+							{correctInfo === true ? (
+								<InputGroup.Text id='basic-addon1'>✓</InputGroup.Text>
+							) : (
+								''
+							)}
+						</InputGroup.Append>
+					</InputGroup>
+				</Form.Group>
+			) : (
+				''
+			)}
+			{fields.includes('name') ? (
+				<Form.Group controlId='formBasicName'>
+					<Form.Label>Nombre y Apellido</Form.Label>
 					<Form.Control
-						type='email'
-						value={mail}
-						onChange={(e) => validateEmail(e.target.value)}
+						type='name'
+						value={name}
+						onChange={(e) => setName(e.target.value)}
 					/>
-					<InputGroup.Append>
-						{correctInfo === false ? (
-							<InputGroup.Text id='basic-addon1'>
-								Invalid email
-							</InputGroup.Text>
-						) : (
-							''
-						)}
-						{correctInfo === true ? (
-							<InputGroup.Text id='basic-addon1'>✓</InputGroup.Text>
-						) : (
-							''
-						)}
-					</InputGroup.Append>
-				</InputGroup>
-			</Form.Group>
-
-			<Form.Group controlId='formBasicName'>
-				<Form.Label>Nombre y Apellido</Form.Label>
-				<Form.Control
-					type='name'
-					value={name}
-					onChange={(e) => setName(e.target.value)}
-				/>
-			</Form.Group>
-			<Form.Group controlId='formBasicCuil'>
-				<Form.Label>CUIL</Form.Label>
-				<Form.Control
-					value={cuil}
-					onChange={(e) => setCuil(e.target.value)}
-				/>
-			</Form.Group>
-			<Form.Group controlId='formBasicCBU'>
-				<Form.Label>CBU</Form.Label>
-				<Form.Control
-					value={cbu}
-					onChange={(e) => setCbu(e.target.value)}
-				/>
-			</Form.Group>
+				</Form.Group>
+			) : (
+				''
+			)}
+			{fields.includes('CUIL') ? (
+				<Form.Group controlId='formBasicCuil'>
+					<Form.Label>CUIL</Form.Label>
+					<Form.Control
+						value={cuil}
+						type='text'
+						maxLength='11'
+						onChange={(e) => setCuil(e.target.value)}
+					/>
+				</Form.Group>
+			) : (
+				''
+			)}
+			{fields.includes('CUIL') ? (
+				<Form.Group controlId='formBasicCBU'>
+					<Form.Label>CBU</Form.Label>
+					<Form.Control
+						value={cbu}
+						type='text'
+						maxLength='22'
+						onChange={(e) => setCbu(e.target.value)}
+					/>
+				</Form.Group>
+			) : (
+				''
+			)}
 
 			<Button variant='primary' onClick={createOrder}>
 				Crear Orden

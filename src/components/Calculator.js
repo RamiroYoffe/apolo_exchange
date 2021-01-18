@@ -10,13 +10,17 @@ import Col from 'react-bootstrap/Col'
 function Calculator(props) {
 	const [firstAmount, setFirstAmount] = useState(0)
 	const [secondAmount, setSecondAmount] = useState(0)
-	const [firstCurrency, setFirstCurrency] = useState({
-		system: 'paypal',
-		curr: 'USD',
+	const [firstSystem, setFirstSystem] = useState({
+		fields: ['mail', 'name'],
+		name: 'paypal',
+		currency: 'USD',
+		visible: true,
 	})
-	const [secondCurrency, setSecondCurrency] = useState({
-		system: 'transferencia',
-		curr: 'ARS',
+	const [secondSystem, setSecondSystem] = useState({
+		fields: ['mail', 'name', 'CBU', 'CUIL'],
+		name: 'transferencia',
+		currency: 'ARS',
+		visible: true,
 	})
 	const [info, setInfo] = useState([])
 	const [transactionInfo, setTransactionInfo] = useState([])
@@ -40,38 +44,34 @@ function Calculator(props) {
 			})
 	}, [])
 
+	useEffect(() => {
+		liftState(false)
+	}, [firstAmount, secondAmount, firstSystem, secondSystem])
+
 	function handleAmountChange(currentAmount, currOption) {
 		if (currOption === 1) {
 			setFirstAmount(currentAmount)
 			setSecondAmount(
-				convertTo(
-					currentAmount,
-					firstCurrency.system,
-					secondCurrency.system
-				)
+				convertTo(currentAmount, firstSystem.name, secondSystem.name)
 			)
 		} else if (currOption === 2) {
 			setFirstAmount(
-				convertTo(
-					currentAmount,
-					secondCurrency.system,
-					firstCurrency.system
-				)
+				convertTo(currentAmount, secondSystem.name, firstSystem.name)
 			)
 			setSecondAmount(currentAmount)
 		}
 	}
 
-	function handleSelectChange(currentSystem, currentCurrency, option) {
+	function handleSelectChange(currentSystem, option) {
 		if (option === 1) {
-			setFirstCurrency({ system: currentSystem, curr: currentCurrency })
+			setFirstSystem(currentSystem)
 			setFirstAmount(
-				convertTo(secondAmount, secondCurrency.system, currentSystem)
+				convertTo(secondAmount, secondSystem.name, currentSystem.name)
 			)
 		} else {
-			setSecondCurrency({ system: currentSystem, curr: currentCurrency })
+			setSecondSystem(currentSystem)
 			setSecondAmount(
-				convertTo(firstAmount, firstCurrency.system, currentSystem)
+				convertTo(firstAmount, firstSystem.name, currentSystem.name)
 			)
 		}
 	}
@@ -97,28 +97,30 @@ function Calculator(props) {
 		}
 	}
 
-	function switchCurrencies() {
-		const currA = firstCurrency
-		const currB = secondCurrency
-		setFirstCurrency({ system: currB.system, curr: currB.curr })
-		setSecondCurrency({ system: currA.system, curr: currA.curr })
+	function switchSistems() {
+		const systA = firstSystem
+		const systB = secondSystem
+		setFirstSystem(systB)
+		setSecondSystem(systA)
 		setFirstAmount(secondAmount)
-		setSecondAmount(convertTo(secondAmount, currB.system, currA.system))
+		setSecondAmount(convertTo(secondAmount, systB.name, systA.name))
 	}
 
-	function liftState() {
+	function liftState(openFields) {
 		if (
 			firstAmount > 0 &&
 			secondAmount > 0 &&
-			firstCurrency.curr !== secondCurrency.curr
+			firstSystem.currency !== secondSystem.currency
 		) {
 			props.updateValues(
 				firstAmount,
 				secondAmount,
-				firstCurrency,
-				secondCurrency
+				firstSystem,
+				secondSystem
 			)
-			props.setVisible(true)
+			if (openFields) {
+				props.setVisible(true)
+			}
 		}
 	}
 
@@ -130,7 +132,7 @@ function Calculator(props) {
 			>
 				<Form>
 					<Form.Group controlId='CustomSelect'>
-						<Form.Label>Quiero vender: {firstCurrency.curr}</Form.Label>
+						<Form.Label>Quiero vender: {firstSystem.currency}</Form.Label>
 						<Form.Row>
 							<Col sm='auto'>
 								<CurrencyInput
@@ -144,8 +146,8 @@ function Calculator(props) {
 									systems={info}
 									amount={secondAmount}
 									option={1}
-									value={firstCurrency.system}
-									otherSystem={secondCurrency.system}
+									value={firstSystem.name}
+									otherSystem={secondSystem.name}
 									onSelectChange={handleSelectChange}
 									convertTo={convertTo}
 								/>
@@ -159,12 +161,14 @@ function Calculator(props) {
 							backgroundColor: 'indigo',
 							borderRadius: '50%',
 						}}
-						onClick={switchCurrencies}
+						onClick={switchSistems}
 					>
 						⇅
 					</Button>
 					<Form.Group controlId='CustomSelect2'>
-						<Form.Label>Quiero comprar: {secondCurrency.curr}</Form.Label>
+						<Form.Label>
+							Quiero comprar: {secondSystem.currency}
+						</Form.Label>
 						<Form.Row>
 							<Col sm='auto'>
 								<CurrencyInput
@@ -178,8 +182,8 @@ function Calculator(props) {
 									systems={info}
 									option={2}
 									amount={firstAmount}
-									value={secondCurrency.system}
-									otherSystem={firstCurrency.system}
+									value={secondSystem.name}
+									otherSystem={firstSystem.name}
 									onSelectChange={handleSelectChange}
 									convertTo={convertTo}
 								/>
@@ -188,7 +192,7 @@ function Calculator(props) {
 					</Form.Group>
 				</Form>
 			</div>
-			<Button className='mx-auto' onClick={liftState}>
+			<Button className='mx-auto' onClick={() => liftState(true)}>
 				Siguiente
 			</Button>
 		</div>

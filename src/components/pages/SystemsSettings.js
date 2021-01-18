@@ -4,26 +4,23 @@ import { LinkContainer } from 'react-router-bootstrap'
 import Table from 'react-bootstrap/Table'
 import Button from 'react-bootstrap/Button'
 
-function CurrencySettings() {
+function SystemsSettings() {
 	const [data, setData] = useState([])
 
-	const currencies = data.map((curr) => (
-		<thead key={curr.doc._id}>
+	const systems = data.map((syst) => (
+		<thead key={syst.doc._id}>
 			<tr>
-				<th>{curr.doc.system}</th>
-				<th>{curr.doc.name}</th>
-				<th>
-					1{curr.doc.name} = {curr.doc.value}USD
-				</th>
-				<th>{curr.doc.visible ? 'Disponible' : 'No Disponible'}</th>
+				<th>{syst.doc.name}</th>
+				<th>{syst.doc.currency}</th>
+				<th>{syst.doc.visible ? 'Disponible' : 'No Disponible'}</th>
 				<th>
 					<Button
 						size='sm'
 						onClick={() => {
-							let visiblent = !curr.doc.visible
+							let visiblent = !syst.doc.visible
 							axios
 								.patch(
-									`http://localhost:5000/currency/${curr.doc.name}`,
+									`http://localhost:5000/system/${syst.doc.name}`,
 									[
 										{
 											propName: 'visible',
@@ -42,11 +39,11 @@ function CurrencySettings() {
 								})
 						}}
 					>
-						{curr.doc.visible ? 'Desabilitar' : 'Habilitar'}
+						{syst.doc.visible ? 'Desabilitar' : 'Habilitar'}
 					</Button>
 				</th>
 				<th>
-					<LinkContainer to={`/manager/currency/edit/${curr.doc.system}`}>
+					<LinkContainer to={`/manager/systems/edit/${syst.doc.name}`}>
 						<Button size='sm'>Editar</Button>
 					</LinkContainer>
 				</th>
@@ -55,8 +52,8 @@ function CurrencySettings() {
 	))
 
 	useEffect(() => {
-		axios.get('http://localhost:5000/currency').then((response) => {
-			setData(response.data.currencies)
+		axios.get('http://localhost:5000/system').then((response) => {
+			setData(response.data.Systems)
 		})
 	}, [])
 
@@ -67,18 +64,17 @@ function CurrencySettings() {
 				<thead>
 					<tr>
 						<th>Sistema</th>
-						<th>Nombre</th>
-						<th>Email</th>
+						<th>Moneda</th>
 						<th>Disponible</th>
 					</tr>
 				</thead>
-				{currencies}
+				{systems}
 			</Table>
-			<LinkContainer to={`/manager/currency/edit/new`}>
-				<Button>Crear nueva Moneda</Button>
+			<LinkContainer to={`/manager/systems/edit/new`}>
+				<Button>Crear nuevo sistema</Button>
 			</LinkContainer>
 		</>
 	)
 }
 
-export default CurrencySettings
+export default SystemsSettings
