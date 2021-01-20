@@ -11,14 +11,42 @@ function Calculator(props) {
 	const [firstAmount, setFirstAmount] = useState(0)
 	const [secondAmount, setSecondAmount] = useState(0)
 	const [firstSystem, setFirstSystem] = useState({
-		fields: ['mail', 'name'],
-		name: 'paypal',
+		fields: [
+			{
+				value: 'mail',
+				label: 'Mail',
+			},
+			{
+				value: 'name',
+				label: 'Nombre y apellido',
+			},
+		],
+		value: 'paypal',
+		label: 'paypal',
 		currency: 'USD',
 		visible: true,
 	})
 	const [secondSystem, setSecondSystem] = useState({
-		fields: ['mail', 'name', 'CBU', 'CUIL'],
-		name: 'transferencia',
+		fields: [
+			{
+				value: 'mail',
+				label: 'Mail',
+			},
+			{
+				value: 'name',
+				label: 'Nombre y apellido',
+			},
+			{
+				value: 'CBU',
+				label: 'CBU',
+			},
+			{
+				value: 'CUIL',
+				label: 'CUIL',
+			},
+		],
+		value: 'transferencia',
+		label: 'transferencia',
 		currency: 'ARS',
 		visible: true,
 	})
@@ -51,13 +79,9 @@ function Calculator(props) {
 	function handleAmountChange(currentAmount, currOption) {
 		if (currOption === 1) {
 			setFirstAmount(currentAmount)
-			setSecondAmount(
-				convertTo(currentAmount, firstSystem.name, secondSystem.name)
-			)
+			setSecondAmount(convertTo(currentAmount, firstSystem, secondSystem))
 		} else if (currOption === 2) {
-			setFirstAmount(
-				convertTo(currentAmount, secondSystem.name, firstSystem.name)
-			)
+			setFirstAmount(convertTo(currentAmount, secondSystem, firstSystem))
 			setSecondAmount(currentAmount)
 		}
 	}
@@ -65,14 +89,10 @@ function Calculator(props) {
 	function handleSelectChange(currentSystem, option) {
 		if (option === 1) {
 			setFirstSystem(currentSystem)
-			setFirstAmount(
-				convertTo(secondAmount, secondSystem.name, currentSystem.name)
-			)
+			setFirstAmount(convertTo(secondAmount, secondSystem, currentSystem))
 		} else {
 			setSecondSystem(currentSystem)
-			setSecondAmount(
-				convertTo(firstAmount, firstSystem.name, currentSystem.name)
-			)
+			setSecondAmount(convertTo(firstAmount, firstSystem, currentSystem))
 		}
 	}
 
@@ -89,8 +109,8 @@ function Calculator(props) {
 	function findCurrencyData(firstSystem, secondSystem) {
 		for (const i in transactionInfo) {
 			if (
-				transactionInfo[i].doc.system1 === firstSystem &&
-				transactionInfo[i].doc.system2 === secondSystem
+				transactionInfo[i].doc.system1.value === firstSystem.value &&
+				transactionInfo[i].doc.system2.value === secondSystem.value
 			) {
 				return transactionInfo[i].doc.value
 			}
@@ -103,7 +123,7 @@ function Calculator(props) {
 		setFirstSystem(systB)
 		setSecondSystem(systA)
 		setFirstAmount(secondAmount)
-		setSecondAmount(convertTo(secondAmount, systB.name, systA.name))
+		setSecondAmount(convertTo(secondAmount, systB.value, systA.value))
 	}
 
 	function liftState(openFields) {
@@ -146,8 +166,8 @@ function Calculator(props) {
 									systems={info}
 									amount={secondAmount}
 									option={1}
-									value={firstSystem.name}
-									otherSystem={secondSystem.name}
+									value={firstSystem.value}
+									otherSystem={secondSystem}
 									onSelectChange={handleSelectChange}
 									convertTo={convertTo}
 								/>
@@ -182,8 +202,8 @@ function Calculator(props) {
 									systems={info}
 									option={2}
 									amount={firstAmount}
-									value={secondSystem.name}
-									otherSystem={firstSystem.name}
+									value={secondSystem.value}
+									otherSystem={firstSystem}
 									onSelectChange={handleSelectChange}
 									convertTo={convertTo}
 								/>

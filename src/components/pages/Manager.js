@@ -7,6 +7,8 @@ function Manager() {
 			<Link to='/manager/orders'>Gestion de ordenes</Link>
 			<br />
 			<Link to='/manager/systems'>Gestion de monedas</Link>
+			<br />
+			<Link to='/manager/transactions'>Gestion de transacciones</Link>
 		</div>
 	)
 }

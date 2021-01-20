@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Route, Switch } from 'react-router-dom'
 
 import Main from './components/pages/Main'
@@ -8,15 +8,17 @@ import OrderList from './components/pages/OrderList'
 import Order from './components/Order'
 import SystemsSettings from './components/pages/SystemsSettings'
 import NewSystem from './components/NewSystem'
+import TransactionSettings from './components/pages/TransactionSettings'
+import NewTransaction from './components/NewTransaction'
 import OrderConfirmed from './components/pages/OrderConfirmed'
 import UserPage from './components/pages/UserPage'
 import LogIn from './components/pages/LogIn'
 import SignUp from './components/pages/SignUp'
 
-import { AuthContext } from './components/AuthContext'
+// import { AuthContext } from './components/AuthContext'
 
 function App() {
-	const authContext = useContext(AuthContext)
+	// const authContext = useContext(AuthContext)
 
 	useEffect(() => {}, [])
 
@@ -33,9 +35,16 @@ function App() {
 				<Route exact path='/manager/orders' component={OrderList} />
 				<Route exact path='/manager/orders/:orderNum' component={Order} />
 				<Route exact path='/manager/systems' component={SystemsSettings} />
+				<Route path='/manager/systems/:systemName' component={NewSystem} />
 				<Route
-					path='/manager/systems/edit/:systemName'
-					component={NewSystem}
+					exact
+					path='/manager/transactions'
+					component={TransactionSettings}
+				/>
+				<Route
+					exact
+					path='/manager/transactions/:transactionName'
+					component={NewTransaction}
 				/>
 			</Switch>
 		</>

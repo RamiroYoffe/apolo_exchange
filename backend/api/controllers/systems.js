@@ -25,7 +25,7 @@ exports.system_get_all = (req, res, next) => {
 }
 
 exports.system_get_one = (req, res, next) => {
-	System.find({ name: req.params.name })
+	System.find({ value: req.params.value })
 		.exec()
 		.then((docs) => {
 			const response = {
@@ -67,7 +67,7 @@ exports.system_get_currency = (req, res, next) => {
 }
 
 exports.system_create = (req, res, next) => {
-	System.find({ name: req.body.name })
+	System.find({ value: req.body.value })
 		.exec()
 		.then((systemExistente) => {
 			if (systemExistente.length > 0) {
@@ -79,7 +79,8 @@ exports.system_create = (req, res, next) => {
 				//crear el system nueva
 				const system = new System({
 					_id: new mongoose.Types.ObjectId(),
-					name: req.body.name,
+					value: req.body.value,
+					label: req.body.label,
 					currency: req.body.currency,
 					fields: req.body.fields,
 					visible: true,
@@ -89,7 +90,8 @@ exports.system_create = (req, res, next) => {
 					.then((result) => {
 						res.status(201).json({
 							message: 'System succesfully added',
-							name: result.name,
+							value: result.value,
+							label: result.label,
 							currency: result.currency,
 							fields: result.fields,
 							visible: result.visible,
@@ -111,12 +113,12 @@ exports.system_create = (req, res, next) => {
 		})
 }
 
-exports.system_delete_name = (req, res, next) => {
-	System.find({ name: req.params.name })
+exports.system_delete_value = (req, res, next) => {
+	System.find({ value: req.params.value })
 		.exec()
 		.then((systemEncontrada) => {
 			if (systemEncontrada.length > 0) {
-				System.remove({ name: req.params.name })
+				System.remove({ value: req.params.value })
 					.exec()
 					.then((systemExistente) => {
 						res.status(200).json({
@@ -139,13 +141,13 @@ exports.system_delete_name = (req, res, next) => {
 }
 
 exports.system_modify_value = (req, res, next) => {
-	const name = req.params.name
+	const value = req.params.value
 	const updateOps = {}
 	for (const ops of req.body) {
 		updateOps[ops.propName] = ops.value
 	}
-	System.find({ name: req.params.name })
-	System.update({ name: name }, { $set: updateOps })
+	System.find({ value: req.params.value })
+	System.update({ value: value }, { $set: updateOps })
 		.exec()
 		.then((result) => {
 			console.log(result)

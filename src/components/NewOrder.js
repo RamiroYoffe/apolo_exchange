@@ -52,7 +52,7 @@ function NewOrder(props) {
 
 	return (
 		<Form>
-			{fields.includes('mail') ? (
+			{fields.filter((e) => e.value === 'mail').length > 0 ? (
 				<Form.Group controlId='formBasicEmail'>
 					<Form.Label>Correo Electronico</Form.Label>
 					<InputGroup className='mb-3'>
@@ -80,7 +80,7 @@ function NewOrder(props) {
 			) : (
 				''
 			)}
-			{fields.includes('name') ? (
+			{fields.filter((e) => e.value === 'name').length > 0 ? (
 				<Form.Group controlId='formBasicName'>
 					<Form.Label>Nombre y Apellido</Form.Label>
 					<Form.Control
@@ -92,7 +92,7 @@ function NewOrder(props) {
 			) : (
 				''
 			)}
-			{fields.includes('CUIL') ? (
+			{fields.filter((e) => e.value === 'CUIL').length > 0 ? (
 				<Form.Group controlId='formBasicCuil'>
 					<Form.Label>CUIL</Form.Label>
 					<Form.Control
@@ -105,7 +105,7 @@ function NewOrder(props) {
 			) : (
 				''
 			)}
-			{fields.includes('CUIL') ? (
+			{fields.filter((e) => e.value === 'CBU').length > 0 ? (
 				<Form.Group controlId='formBasicCBU'>
 					<Form.Label>CBU</Form.Label>
 					<Form.Control
@@ -118,7 +118,6 @@ function NewOrder(props) {
 			) : (
 				''
 			)}
-
 			<Button variant='primary' onClick={createOrder}>
 				Crear Orden
 			</Button>

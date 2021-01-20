@@ -6,17 +6,19 @@ function CurrencySelector(props) {
 		<optgroup label={curr.doc.currency} key={curr.doc.currency}>
 			<option
 				key={curr.doc._id}
-				disabled={!curr.doc.visible || curr.doc.name === props.otherSystem}
-				value={curr.doc.name}
+				disabled={
+					!curr.doc.visible || curr.doc.value === props.otherSystem.value
+				}
+				value={curr.doc.value}
 			>
-				{curr.doc.name === props.value ||
-				curr.doc.name === props.otherSystem
-					? curr.doc.name
+				{curr.doc.value === props.value ||
+				curr.doc.value === props.otherSystem.value
+					? curr.doc.value
 					: `${props.convertTo(
 							props.amount,
 							props.otherSystem,
-							curr.doc.name
-					  )} ${curr.doc.currency} | ${curr.doc.name}`}
+							curr.doc
+					  )} ${curr.doc.currency} | ${curr.doc.value}`}
 			</option>
 		</optgroup>
 	))
@@ -27,7 +29,7 @@ function CurrencySelector(props) {
 
 	function findCurrencyData(system) {
 		for (const i in props.systems) {
-			if (props.systems[i].doc.name === system) {
+			if (props.systems[i].doc.value === system) {
 				return props.systems[i].doc
 			}
 		}

@@ -10,7 +10,7 @@ function SystemsSettings() {
 	const systems = data.map((syst) => (
 		<thead key={syst.doc._id}>
 			<tr>
-				<th>{syst.doc.name}</th>
+				<th>{syst.doc.value}</th>
 				<th>{syst.doc.currency}</th>
 				<th>{syst.doc.visible ? 'Disponible' : 'No Disponible'}</th>
 				<th>
@@ -20,7 +20,7 @@ function SystemsSettings() {
 							let visiblent = !syst.doc.visible
 							axios
 								.patch(
-									`http://localhost:5000/system/${syst.doc.name}`,
+									`http://localhost:5000/system/${syst.doc.value}`,
 									[
 										{
 											propName: 'visible',
@@ -43,7 +43,7 @@ function SystemsSettings() {
 					</Button>
 				</th>
 				<th>
-					<LinkContainer to={`/manager/systems/edit/${syst.doc.name}`}>
+					<LinkContainer to={`/manager/systems/${syst.doc.value}`}>
 						<Button size='sm'>Editar</Button>
 					</LinkContainer>
 				</th>
@@ -52,9 +52,14 @@ function SystemsSettings() {
 	))
 
 	useEffect(() => {
-		axios.get('http://localhost:5000/system').then((response) => {
-			setData(response.data.Systems)
-		})
+		axios
+			.get('http://localhost:5000/system')
+			.then((response) => {
+				setData(response.data.Systems)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
 	}, [])
 
 	return (
@@ -70,7 +75,7 @@ function SystemsSettings() {
 				</thead>
 				{systems}
 			</Table>
-			<LinkContainer to={`/manager/systems/edit/new`}>
+			<LinkContainer to={`/manager/systems/new`}>
 				<Button>Crear nuevo sistema</Button>
 			</LinkContainer>
 		</>
