@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
+import AlertModal from './AlertModal'
 import Form from 'react-bootstrap/Form'
 import Select from 'react-select'
 import Button from 'react-bootstrap/Button'
@@ -17,7 +18,7 @@ function NewSystem() {
 		{ value: 'CBU', label: 'CBU' },
 		{ value: 'CUIL', label: 'CUIL' },
 	]
-
+	const [show, setShow] = useState(false)
 	let { systemName } = useParams()
 	const history = useHistory()
 
@@ -60,10 +61,6 @@ function NewSystem() {
 					.patch(`http://localhost:5000/system/${systemName}`, [
 						{ propName: 'value', value: system },
 						{ propName: 'label', value: system },
-						// {
-						// 	propName: 'value',
-						// 	value: (1 / usdValue) * currency.value,
-						// },
 						{ propName: 'currency', value: systemCurrency },
 						{ propName: 'fields', value: systemFields },
 						{ propName: 'visible', value: systemVisible },
@@ -81,8 +78,20 @@ function NewSystem() {
 		}
 	}
 
+	function deleteFunc() {
+		axios
+			.delete(`http://localhost:5000/system/${system}`)
+			.then(function (response) {
+				console.log(response)
+				history.push(`/manager/systems`)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+	}
+
 	return (
-		<div>
+		<>
 			<Form>
 				<Form.Group controlId='formBasicSystem'>
 					<Form.Row>
@@ -105,26 +114,39 @@ function NewSystem() {
 
 				<Form.Label>Campos a completar</Form.Label>
 
+				<Select
+					placeholder='Selecionar...'
+					value={systemFields}
+					onChange={setSystemFields}
+					options={fieldsOptions}
+					backspaceRemovesValue
+					isMulti
+					name='fields'
+					className='basic-multi-select'
+					classNamePrefix='select'
+				/>
+
 				<Form.Row>
 					<Col sm='3'>
 						<Button variant='primary' onClick={createSystem}>
 							{systemName === 'new' ? 'Crear sistema' : 'Editar sistema'}
 						</Button>
 					</Col>
+					<Col sm='3'>
+						<Button variant='danger' onClick={() => setShow(true)}>
+							Borrar sistema
+						</Button>
+					</Col>
 				</Form.Row>
 			</Form>
-			<Select
-				placeholder='Selecionar...'
-				value={systemFields}
-				onChange={setSystemFields}
-				options={fieldsOptions}
-				backspaceRemovesValue
-				isMulti
-				name='fields'
-				className='basic-multi-select'
-				classNamePrefix='select'
+			<AlertModal
+				type={'sistema'}
+				text={system}
+				deleteFunc={deleteFunc}
+				show={show}
+				onHide={() => setShow(false)}
 			/>
-		</div>
+		</>
 	)
 }
 

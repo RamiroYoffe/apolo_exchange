@@ -5,6 +5,7 @@ import Table from 'react-bootstrap/Table'
 
 function OrderList() {
 	const [info, setInfo] = useState([])
+
 	useEffect(() => {
 		axios.get('http://localhost:5000/order').then((response) => {
 			setInfo(response.data.Orders)

@@ -7,12 +7,15 @@ function CurrencyInput(props) {
 	}
 
 	return (
-		<Form.Control
-			type='number'
-			value={props.amount}
-			onChange={handleChange}
-			onClick={(e) => (e.target.value = '')}
-		/>
+		<Form.Group>
+			<Form.Control
+				aria-label={props.option === 1 ? 'sell amount' : 'buy amount'}
+				type='number'
+				value={props.amount}
+				onChange={handleChange}
+				onClick={(e) => (e.target.value = '')}
+			/>
+		</Form.Group>
 	)
 }
 

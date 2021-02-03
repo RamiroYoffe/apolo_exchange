@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import axios from 'axios'
+import AlertModal from './AlertModal'
 import Form from 'react-bootstrap/Form'
 import Select from 'react-select'
 import Button from 'react-bootstrap/Button'
@@ -13,6 +14,7 @@ function NewTransaction() {
 	const [transactionValue, setTransactionValue] = useState('')
 	const [systemsOptions, setSystemsOptions] = useState([])
 	let { transactionName } = useParams()
+	const [show, setShow] = useState(false)
 	const history = useHistory()
 
 	useEffect(() => {
@@ -44,7 +46,7 @@ function NewTransaction() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [transactionName])
 
-	function createSystem() {
+	function createTransaction() {
 		if (transaction !== '' && systemOne !== '' && systemTwo !== '') {
 			if (transactionName === 'new') {
 				axios
@@ -100,6 +102,18 @@ function NewTransaction() {
 		}
 	}
 
+	function deleteFunc() {
+		axios
+			.delete(`http://localhost:5000/transaction/${transaction}`)
+			.then(function (response) {
+				console.log(response)
+				history.push(`/manager/transactions`)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+	}
+
 	useEffect(() => {
 		if (systemOne.value !== '' && systemTwo.value !== '') {
 			setTransaction(`${systemOne.value}-${systemTwo.value}`)
@@ -107,61 +121,75 @@ function NewTransaction() {
 	}, [systemOne, systemTwo])
 
 	return (
-		<Form>
-			<Form.Row>
-				<Col sm='3'>
-					<Form.Label>Nombre</Form.Label>
-					<Form.Control value={transaction} readOnly />
-				</Col>
-			</Form.Row>
-			<Form.Row>
-				<Col sm='3'>
-					<Form.Label>Sistema de venta</Form.Label>
-					<Select
-						placeholder='Selecionar...'
-						value={systemOne}
-						onChange={setSystemOne}
-						options={systemsOptions}
-						backspaceRemovesValue
-						name='firstSystem'
-						className='basic-multi-select'
-						classNamePrefix='select'
-					/>
-				</Col>
-				<Col sm='3'>
-					<Form.Label>Sistema de venta</Form.Label>
-					<Select
-						placeholder='Selecionar...'
-						value={systemTwo}
-						onChange={setSystemTwo}
-						options={systemsOptions}
-						backspaceRemovesValue
-						name='secondSystem'
-						className='basic-multi-select'
-						classNamePrefix='select'
-					/>
-				</Col>
-			</Form.Row>
-			<Form.Row>
-				<Col sm='3'>
-					<Form.Label>Valor</Form.Label>
-					<Form.Control
-						type='number'
-						value={transactionValue}
-						onChange={(e) => setTransactionValue(e.target.value)}
-					/>
-				</Col>
-			</Form.Row>
-			<Form.Row>
-				<Col sm='3'>
-					<Button variant='primary' onClick={createSystem}>
-						{transactionName === 'new'
-							? 'Crear sistema'
-							: 'Editar sistema'}
-					</Button>
-				</Col>
-			</Form.Row>
-		</Form>
+		<>
+			<Form>
+				<Form.Row>
+					<Col sm='3'>
+						<Form.Label>Nombre</Form.Label>
+						<Form.Control value={transaction} readOnly />
+					</Col>
+				</Form.Row>
+				<Form.Row>
+					<Col sm='3'>
+						<Form.Label>Sistema de venta</Form.Label>
+						<Select
+							placeholder='Selecionar...'
+							value={systemOne}
+							onChange={setSystemOne}
+							options={systemsOptions}
+							backspaceRemovesValue
+							name='firstSystem'
+							className='basic-multi-select'
+							classNamePrefix='select'
+						/>
+					</Col>
+					<Col sm='3'>
+						<Form.Label>Sistema de compra</Form.Label>
+						<Select
+							placeholder='Selecionar...'
+							value={systemTwo}
+							onChange={setSystemTwo}
+							options={systemsOptions}
+							backspaceRemovesValue
+							name='secondSystem'
+							className='basic-multi-select'
+							classNamePrefix='select'
+						/>
+					</Col>
+				</Form.Row>
+				<Form.Row>
+					<Col sm='3'>
+						<Form.Label>Valor</Form.Label>
+						<Form.Control
+							type='number'
+							value={transactionValue}
+							onChange={(e) => setTransactionValue(e.target.value)}
+						/>
+					</Col>
+				</Form.Row>
+				<Form.Row>
+					<Col sm='3'>
+						<Button variant='primary' onClick={createTransaction}>
+							{transactionName === 'new'
+								? 'Crear transacción'
+								: 'Editar transacción'}
+						</Button>
+					</Col>
+					<Col sm='3'>
+						<Button variant='danger' onClick={() => setShow(true)}>
+							Borrar transacción
+						</Button>
+					</Col>
+				</Form.Row>
+			</Form>
+			<AlertModal
+				type={'transacción'}
+				text={transaction}
+				deleteFunc={deleteFunc}
+				show={show}
+				onHide={() => setShow(false)}
+			/>
+		</>
 	)
 }
 

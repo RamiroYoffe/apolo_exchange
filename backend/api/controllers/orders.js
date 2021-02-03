@@ -88,6 +88,27 @@ exports.order_get_mail = (req, res, next) => {
 //     });
 // };
 
+exports.order_modify_value = (req, res, next) => {
+	const orderNumber = req.params.orderNumber
+	const updateOps = {}
+	for (const ops of req.body) {
+		updateOps[ops.propName] = ops.value
+	}
+	Order.find({ orderNumber: req.params.orderNumber })
+	Order.update({ orderNumber: orderNumber }, { $set: updateOps })
+		.exec()
+		.then((result) => {
+			console.log(result)
+			res.status(200).json({
+				message: 'Order updated',
+			})
+		})
+		.catch((err) => {
+			console.log(err)
+			res.status(500).json({ error: err })
+		})
+}
+
 exports.order_create = (req, res, next) => {
 	Order.find()
 		.exec()
