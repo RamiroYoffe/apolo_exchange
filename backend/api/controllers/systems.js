@@ -83,6 +83,7 @@ exports.system_create = (req, res, next) => {
 					label: req.body.label,
 					currency: req.body.currency,
 					fields: req.body.fields,
+					minimum: req.body.minimum,
 					visible: true,
 				})
 				system
@@ -94,6 +95,7 @@ exports.system_create = (req, res, next) => {
 							label: result.label,
 							currency: result.currency,
 							fields: result.fields,
+							minimum: req.body.minimum,
 							visible: result.visible,
 						})
 					})

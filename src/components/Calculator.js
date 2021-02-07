@@ -6,6 +6,8 @@ import CurrencySelector from './CurrencySelector'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
+import Alert from 'react-bootstrap/Alert'
+import { Card, Row } from 'react-bootstrap'
 
 function Calculator(props) {
 	const [firstAmount, setFirstAmount] = useState(0)
@@ -21,10 +23,12 @@ function Calculator(props) {
 				label: 'Nombre y apellido',
 			},
 		],
+		_id: '601f0009e22a421241c2a9f5',
 		value: 'paypal',
 		label: 'paypal',
 		currency: 'USD',
 		visible: true,
+		minimum: 10,
 	})
 	const [secondSystem, setSecondSystem] = useState({
 		fields: [
@@ -44,11 +48,17 @@ function Calculator(props) {
 				value: 'CUIL',
 				label: 'CUIL',
 			},
+			{
+				value: 'bank',
+				label: 'Nombre del banco',
+			},
 		],
-		value: 'transferencia',
-		label: 'transferencia',
+		_id: '601f005de22a421241c2a9f7',
+		value: 'bancaria',
+		label: 'bancaria',
 		currency: 'ARS',
 		visible: true,
+		minimum: 1900,
 	})
 	const [info, setInfo] = useState([])
 	const [transactionInfo, setTransactionInfo] = useState([])
@@ -101,8 +111,17 @@ function Calculator(props) {
 		if (Number.isNaN(input)) {
 			return ''
 		}
-
-		const output = amount * findCurrencyData(thisSystem, otherSystem)
+		let output = 0
+		if (firstSystem.value === 'paypal' || firstSystem.value === 'paypalEU') {
+			if (amount >= 100) {
+				output = amount * findCurrencyData(thisSystem, otherSystem).cienMas
+			} else {
+				output =
+					amount * findCurrencyData(thisSystem, otherSystem).cienMenos
+			}
+		} else {
+			output = amount * findCurrencyData(thisSystem, otherSystem).cienMenos
+		}
 		return output
 	}
 
@@ -146,75 +165,106 @@ function Calculator(props) {
 
 	return (
 		<div>
-			<div
-				className='p-3 mb-2 bg-light'
-				style={{ width: '30vw', borderRadius: '10%' }}
-			>
-				<Form>
-					<Form.Group controlId='CustomSelect'>
-						<Form.Label>Quiero vender: {firstSystem.currency}</Form.Label>
-						<Form.Row>
-							<Col sm='auto'>
-								<CurrencyInput
-									option={1}
-									amount={firstAmount}
-									onAmountChange={handleAmountChange}
-								/>
-							</Col>
-							<Col sm='5'>
-								<CurrencySelector
-									systems={info}
-									amount={secondAmount}
-									option={1}
-									value={firstSystem.value}
-									otherSystem={secondSystem}
-									onSelectChange={handleSelectChange}
-									convertTo={convertTo}
-								/>
-							</Col>
-						</Form.Row>
-					</Form.Group>
-					<Button
-						className='mb-2 mx-auto'
+			<Row>
+				<Col sm='auto' lg='5'>
+					<Card
+						sm='auto'
+						bg='light'
 						style={{
-							color: 'white',
-							backgroundColor: 'indigo',
-							borderRadius: '50%',
+							alignItems: 'center',
+							borderRadius: '10%',
+							padding: '2%',
+							margin: '2%cd bac',
 						}}
-						onClick={switchSistems}
 					>
-						⇅
-					</Button>
-					<Form.Group controlId='CustomSelect2'>
-						<Form.Label>
-							Quiero comprar: {secondSystem.currency}
-						</Form.Label>
-						<Form.Row>
-							<Col sm='auto'>
-								<CurrencyInput
-									option={2}
-									amount={secondAmount}
-									onAmountChange={handleAmountChange}
-								/>
-							</Col>
-							<Col sm='5'>
-								<CurrencySelector
-									systems={info}
-									option={2}
-									amount={firstAmount}
-									value={secondSystem.value}
-									otherSystem={firstSystem}
-									onSelectChange={handleSelectChange}
-									convertTo={convertTo}
-								/>
-							</Col>
-						</Form.Row>
-					</Form.Group>
-				</Form>
-			</div>
-			<Button className='mx-auto' onClick={() => liftState(true)}>
-				Siguiente
-			</Button>
+						<Form sm='auto'>
+							<Form.Group controlId='CustomSelect'>
+								<Form.Row>
+									<Col xs='8' sm='12'>
+										<Form.Label>
+											Quiero vender: {firstSystem.currency}
+										</Form.Label>
+									</Col>
+									<Col xs='8' sm='6'>
+										<CurrencyInput
+											option={1}
+											amount={firstAmount}
+											onAmountChange={handleAmountChange}
+										/>
+									</Col>
+									<Col xs='8' sm='6'>
+										<CurrencySelector
+											systems={info}
+											amount={secondAmount}
+											option={1}
+											value={firstSystem.value}
+											otherSystem={secondSystem}
+											onSelectChange={handleSelectChange}
+											convertTo={convertTo}
+										/>
+									</Col>
+									<Col xs='8' sm='12'>
+										{firstAmount < firstSystem.minimum ? (
+											<Alert key='sellAlert' variant='danger'>
+												El monto debe superar los{' '}
+												{firstSystem.minimum} {firstSystem.currency}
+											</Alert>
+										) : (
+											''
+										)}
+									</Col>
+								</Form.Row>
+							</Form.Group>
+							<Button
+								className='mb-2 mx-auto'
+								style={{
+									color: 'white',
+									backgroundColor: 'indigo',
+									borderRadius: '50%',
+								}}
+								onClick={switchSistems}
+							>
+								⇅
+							</Button>
+							<Form.Group controlId='CustomSelect2'>
+								<Form.Label>
+									Quiero comprar: {secondSystem.currency}
+								</Form.Label>
+								<Form.Row>
+									<Col xs='8' sm='6'>
+										<CurrencyInput
+											option={2}
+											amount={secondAmount}
+											onAmountChange={handleAmountChange}
+										/>
+									</Col>
+									<Col xs='8' sm='6'>
+										<CurrencySelector
+											systems={info}
+											option={2}
+											amount={firstAmount}
+											value={secondSystem.value}
+											otherSystem={firstSystem}
+											onSelectChange={handleSelectChange}
+											convertTo={convertTo}
+										/>
+									</Col>
+								</Form.Row>
+							</Form.Group>
+						</Form>
+						<Button
+							disabled={firstAmount < firstSystem.minimum}
+							className='mx-auto'
+							onClick={() => liftState(true)}
+						>
+							Siguiente
+						</Button>
+					</Card>
+				</Col>
+				<Col sm='6' xs='12'>
+					<Card></Card>
+				</Col>
+			</Row>
 		</div>
 	)
 }

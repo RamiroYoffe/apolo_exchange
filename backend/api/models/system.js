@@ -6,6 +6,7 @@ const systemSchema = mongoose.Schema({
 	label: { type: String, required: true },
 	currency: { type: String, required: true },
 	fields: { type: Array, required: true },
+	minimum: { type: Number, required: false },
 	visible: { type: Boolean, required: true },
 })
 

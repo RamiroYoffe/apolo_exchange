@@ -12,7 +12,9 @@ function NewTransaction() {
 	const [systemOne, setSystemOne] = useState({ value: '' })
 	const [systemTwo, setSystemTwo] = useState({ value: '' })
 	const [transactionValue, setTransactionValue] = useState('')
+	const [plusHundred, setPlusHundred] = useState('')
 	const [systemsOptions, setSystemsOptions] = useState([])
+
 	let { transactionName } = useParams()
 	const [show, setShow] = useState(false)
 	const history = useHistory()
@@ -37,7 +39,10 @@ function NewTransaction() {
 					setTransaction(response.data.Transaction[0].doc.name)
 					setSystemOne(response.data.Transaction[0].doc.system1)
 					setSystemTwo(response.data.Transaction[0].doc.system2)
-					setTransactionValue(response.data.Transaction[0].doc.value)
+					setTransactionValue(
+						response.data.Transaction[0].doc.value.cienMenos
+					)
+					setPlusHundred(response.data.Transaction[0].doc.value.cienMas)
 				})
 				.catch(function (error) {
 					console.log(error)
@@ -54,7 +59,7 @@ function NewTransaction() {
 						name: transaction,
 						system1: systemOne,
 						system2: systemTwo,
-						value: transactionValue,
+						value: { cienMas: plusHundred, cienMenos: transactionValue },
 					})
 					.then(function (response) {
 						console.log(response)
@@ -87,7 +92,13 @@ function NewTransaction() {
 								currency: systemTwo.currency,
 							},
 						},
-						{ propName: 'value', value: transactionValue },
+						{
+							propName: 'value',
+							value: {
+								cienMas: plusHundred,
+								cienMenos: transactionValue,
+							},
+						},
 					])
 					.then(function (response) {
 						console.log(response)
@@ -159,13 +170,31 @@ function NewTransaction() {
 				</Form.Row>
 				<Form.Row>
 					<Col sm='3'>
-						<Form.Label>Valor</Form.Label>
+						<Form.Label>
+							{systemOne.value === 'paypal' ||
+							systemOne.value === 'paypalEU'
+								? 'Valor - menos de 100'
+								: 'Valor'}
+						</Form.Label>
 						<Form.Control
 							type='number'
 							value={transactionValue}
 							onChange={(e) => setTransactionValue(e.target.value)}
 						/>
 					</Col>
+					{systemOne.value === 'paypal' ||
+					systemOne.value === 'paypalEU' ? (
+						<Col sm='3'>
+							<Form.Label>Valor - mas de 100</Form.Label>
+							<Form.Control
+								type='number'
+								value={plusHundred}
+								onChange={(e) => setPlusHundred(e.target.value)}
+							/>
+						</Col>
+					) : (
+						''
+					)}
 				</Form.Row>
 				<Form.Row>
 					<Col sm='3'>

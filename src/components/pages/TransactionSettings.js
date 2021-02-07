@@ -12,7 +12,12 @@ function TransactionSettings() {
 			<tr>
 				<th>{trans.doc.system1.value}</th>
 				<th>{trans.doc.system2.value}</th>
-				<th>{`1 ${trans.doc.system1.currency} = ${trans.doc.value} ${trans.doc.system2.currency}`}</th>
+				<th>
+					{trans.doc.system1.value === 'paypal' ||
+					trans.doc.system1.value === 'paypalEU'
+						? `1 ${trans.doc.system1.currency} = (${trans.doc.value.cienMenos}/${trans.doc.value.cienMas}) ${trans.doc.system2.currency}`
+						: `1 ${trans.doc.system1.currency} = ${trans.doc.value.cienMenos}${trans.doc.system2.currency}`}
+				</th>
 				<th>
 					<LinkContainer to={`/manager/transactions/${trans.doc.name}`}>
 						<Button size='sm'>Editar</Button>

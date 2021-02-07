@@ -10,13 +10,20 @@ function NewOrder(props) {
 	const [cbu, setCbu] = useState('')
 	const [cuil, setCuil] = useState('')
 	const [mail, setMail] = useState('')
+	const [bank, setBank] = useState('')
 	const [correctInfo, setCorrectInfo] = useState(0)
 	const { amountA, amountB, systemA, systemB } = props.transInfo
 	const fields = [...systemA.fields, ...systemB.fields]
 	const history = useHistory()
 
 	function createOrder() {
-		if (name !== '' && cbu !== '' && cuil !== '' && correctInfo) {
+		if (
+			name !== '' &&
+			cbu !== '' &&
+			cuil !== '' &&
+			bank !== '' &&
+			correctInfo
+		) {
 			axios
 				.post('http://localhost:5000/order', {
 					cbu: cbu,
@@ -24,6 +31,7 @@ function NewOrder(props) {
 					account_name: name,
 					user_name: name,
 					mail: mail,
+					bank: bank,
 					amountSent: amountA,
 					amountRecieved: amountB,
 					currencySent: systemA.currency,
@@ -100,6 +108,18 @@ function NewOrder(props) {
 						type='text'
 						maxLength='11'
 						onChange={(e) => setCuil(e.target.value)}
+					/>
+				</Form.Group>
+			) : (
+				''
+			)}
+			{fields.filter((e) => e.value === 'bank').length > 0 ? (
+				<Form.Group controlId='formBasicBank'>
+					<Form.Label>Nombre del banco</Form.Label>
+					<Form.Control
+						value={bank}
+						type='text'
+						onChange={(e) => setBank(e.target.value)}
 					/>
 				</Form.Group>
 			) : (

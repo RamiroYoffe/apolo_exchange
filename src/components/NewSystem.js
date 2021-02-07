@@ -11,13 +11,15 @@ function NewSystem() {
 	const [system, setSystem] = useState('')
 	const [systemCurrency, setSystemCurrency] = useState('')
 	const [systemFields, setSystemFields] = useState('')
-	const [systemVisible, setSystemVisible] = useState(true)
+	const [systemVisible, setSystemVisible] = useState(false)
 	const fieldsOptions = [
 		{ value: 'mail', label: 'Mail' },
 		{ value: 'name', label: 'Nombre y apellido' },
 		{ value: 'CBU', label: 'CBU' },
 		{ value: 'CUIL', label: 'CUIL' },
+		{ value: 'bank', label: 'Nombre del banco' },
 	]
+	const [minAmount, setMinAmount] = useState(0)
 	const [show, setShow] = useState(false)
 	let { systemName } = useParams()
 	const history = useHistory()
@@ -30,6 +32,7 @@ function NewSystem() {
 					setSystem(response.data.systems[0].doc.value)
 					setSystemCurrency(response.data.systems[0].doc.currency)
 					setSystemFields(response.data.systems[0].doc.fields)
+					setMinAmount(response.data.systems[0].doc.minimum)
 					setSystemVisible(response.data.systems[0].doc.visible)
 				})
 				.catch(function (error) {
@@ -47,7 +50,8 @@ function NewSystem() {
 						value: system,
 						label: system,
 						currency: systemCurrency,
-						visible: true,
+						minimum: minAmount,
+						visible: false,
 					})
 					.then(function (response) {
 						console.log(response)
@@ -63,6 +67,7 @@ function NewSystem() {
 						{ propName: 'label', value: system },
 						{ propName: 'currency', value: systemCurrency },
 						{ propName: 'fields', value: systemFields },
+						{ propName: 'minimum', value: minAmount },
 						{ propName: 'visible', value: systemVisible },
 					])
 					.then(function (response) {
@@ -109,11 +114,17 @@ function NewSystem() {
 								onChange={(e) => setSystemCurrency(e.target.value)}
 							/>
 						</Col>
+						<Col sm='3'>
+							<Form.Label>Cantidad minima</Form.Label>
+							<Form.Control
+								type='number'
+								value={minAmount}
+								onChange={(e) => setMinAmount(e.target.value)}
+							/>
+						</Col>
 					</Form.Row>
 				</Form.Group>
-
 				<Form.Label>Campos a completar</Form.Label>
-
 				<Select
 					placeholder='Selecionar...'
 					value={systemFields}
@@ -125,7 +136,6 @@ function NewSystem() {
 					className='basic-multi-select'
 					classNamePrefix='select'
 				/>
-
 				<Form.Row>
 					<Col sm='3'>
 						<Button variant='primary' onClick={createSystem}>
