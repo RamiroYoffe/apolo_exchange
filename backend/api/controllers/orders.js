@@ -142,7 +142,7 @@ exports.order_create = (req, res, next) => {
 								error: 'Auth Failed',
 							})
 						}
-						const decoded = jwt.verify(token, process.env.JWT_KEY)
+						const decoded = jwt.verify(token, 'secret')
 
 						if (decoded.mail === req.body.mail) {
 							//si el mail coincide con el del token:
@@ -152,6 +152,7 @@ exports.order_create = (req, res, next) => {
 								cuil: usr.cuil,
 								account_name: usr.account_name,
 								user_name: usr.user_name,
+								bank: usr.bank,
 								mail: usr.mail,
 								orderNumber: (cant + 1).toLocaleString('en-US', {
 									minimumIntegerDigits: 7,
@@ -208,6 +209,7 @@ exports.order_create = (req, res, next) => {
 							account_name: req.body.account_name,
 							user_name: req.body.user_name,
 							mail: req.body.mail,
+							bank: req.body.bank,
 							orderNumber: (cant + 1).toLocaleString('en-US', {
 								minimumIntegerDigits: 7,
 								useGrouping: false,

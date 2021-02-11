@@ -6,6 +6,7 @@ const orderSchema = mongoose.Schema({
 	cuil: { type: String, required: true },
 	account_name: { type: String, required: true },
 	user_name: { type: String, required: true },
+	bank: { type: String, required: true },
 	mail: {
 		type: String,
 		required: true,

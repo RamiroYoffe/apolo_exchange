@@ -24,22 +24,33 @@ function NewOrder(props) {
 			bank !== '' &&
 			correctInfo
 		) {
+			const headers = {
+				'Content-Type': 'application/json',
+				Authorization:
+					'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJtYWlsIjoicmFtaTJAZ21haWwuY29tIiwidXNlcklkIjoiNjAyNTdkNTE4N2FhNWUxM2Q4Y2RmNWM5IiwiaWF0IjoxNjEzMDY5NjgwLCJleHAiOjE2MTMwNzMyODB9.EHrY2BrgMFX28HiSKf79g5cmHJh1U8NG4dLgvQOJyuo',
+			}
 			axios
-				.post('http://localhost:5000/order', {
-					cbu: cbu,
-					cuil: cuil,
-					account_name: name,
-					user_name: name,
-					mail: mail,
-					bank: bank,
-					amountSent: amountA,
-					amountRecieved: amountB,
-					currencySent: systemA.currency,
-					currencyRecieved: systemB.currency,
-					systemSent: systemA.name,
-					systemRecieved: systemB.name,
-					status: 'A realizar',
-				})
+				.post(
+					'http://localhost:5000/order',
+					{
+						cbu: cbu,
+						cuil: cuil,
+						account_name: name,
+						user_name: name,
+						mail: mail,
+						bank: bank,
+						amountSent: amountA,
+						amountRecieved: amountB,
+						currencySent: systemA.currency,
+						currencyRecieved: systemB.currency,
+						systemSent: systemA.value,
+						systemRecieved: systemB.value,
+						status: 'A realizar',
+					},
+					{
+						headers: headers,
+					}
+				)
 				.then(function (response) {
 					console.log(response)
 					history.push(`/orderConfirmed`)
