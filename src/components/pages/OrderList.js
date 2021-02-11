@@ -35,7 +35,7 @@ function OrderList() {
 	return (
 		<>
 			<h3>Lista de ordenes</h3>
-			<Table striped bordered hover size='sm'>
+			<Table striped bordered hover size='sm' responsive>
 				<thead>
 					<tr>
 						<th>#</th>

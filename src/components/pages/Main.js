@@ -16,10 +16,17 @@ function Main() {
 	}
 
 	return (
-		<>
+		<div
+			style={{
+				height: '100vh',
+				background:
+					'linear-gradient( to bottom left,rgba(75,0,130,0.9), transparent)',
+				backgroundColor: 'orange' /*this your primary color*/,
+			}}
+		>
 			<Calculator updateValues={updateValues} setVisible={setVisible} />
 			{visible ? <NewOrder transInfo={transactionInfo} /> : <h1> </h1>}
-		</>
+		</div>
 	)
 }
 

@@ -14,11 +14,12 @@ function CurrencySelector(props) {
 				{curr.doc.value === props.value ||
 				curr.doc.value === props.otherSystem.value
 					? curr.doc.value
-					: `${props.convertTo(
-							props.amount,
-							props.otherSystem,
-							curr.doc
-					  )} ${curr.doc.currency} | ${curr.doc.value}`}
+					: //	`${props.convertTo(
+					  // 		props.amount,
+					  // 		props.otherSystem,
+					  // 		curr.doc
+					  //   )} ${curr.doc.currency} |
+					  curr.doc.value}
 			</option>
 		</optgroup>
 	))
