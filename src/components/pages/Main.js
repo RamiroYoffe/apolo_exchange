@@ -1,6 +1,10 @@
 import React, { useState } from 'react'
 import Calculator from '../Calculator'
 import NewOrder from '../NewOrder'
+import Container from 'react-bootstrap/Container'
+import Col from 'react-bootstrap/Col'
+import Row from 'react-bootstrap/Row'
+import Card from 'react-bootstrap/Card'
 
 function Main() {
 	const [transactionInfo, setTransctionInfo] = useState({
@@ -24,8 +28,34 @@ function Main() {
 				backgroundColor: 'orange' /*this your primary color*/,
 			}}
 		>
-			<Calculator updateValues={updateValues} setVisible={setVisible} />
-			{visible ? <NewOrder transInfo={transactionInfo} /> : <h1> </h1>}
+			<Container fluid>
+				<Row>
+					<Col xs='12' sm='10' md='8' lg='6' xl='4'>
+						<Calculator
+							updateValues={updateValues}
+							setVisible={setVisible}
+						/>
+					</Col>
+					{visible ? (
+						<Col>
+							<Card
+								bg='light'
+								style={{
+									alignItems: 'center',
+									justifyItems: 'center',
+									borderRadius: '10%',
+									padding: '2%',
+									margin: '10%',
+								}}
+							>
+								<NewOrder transInfo={transactionInfo} />
+							</Card>
+						</Col>
+					) : (
+						''
+					)}
+				</Row>
+			</Container>
 		</div>
 	)
 }

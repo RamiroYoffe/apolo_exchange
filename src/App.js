@@ -1,5 +1,8 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Route, Switch } from 'react-router-dom'
+import PrivateRoute from './components/Auth/PrivateRoute'
+import { ProvideAuth } from './components/Auth/use-auth'
+import axios from 'axios'
 
 import Main from './components/pages/Main'
 import CustomNavbar from './components/CustomNavbar'
@@ -12,42 +15,48 @@ import TransactionSettings from './components/pages/TransactionSettings'
 import NewTransaction from './components/NewTransaction'
 import OrderConfirmed from './components/pages/OrderConfirmed'
 import UserPage from './components/pages/UserPage'
-import LogIn from './components/pages/LogIn'
-import SignUp from './components/pages/SignUp'
+import NoMatch from './components/NoMatch'
+import LogIn from './components/Auth/LogIn'
+import SignUp from './components/Auth/SignUp'
 
-// import { AuthContext } from './components/AuthContext'
+axios.defaults.withCredentials = true
 
 function App() {
-	// const authContext = useContext(AuthContext)
-
-	useEffect(() => {}, [])
-
 	return (
-		<>
+		<ProvideAuth>
 			<CustomNavbar />
 			<Switch>
 				<Route exact path='/' component={Main} />
 				<Route exact path='/login' component={LogIn} />
 				<Route exact path='/signup' component={SignUp} />
-				<Route exact path='/user' component={UserPage} />
 				<Route exact path='/orderConfirmed' component={OrderConfirmed} />
-				<Route exact path='/manager' component={Manager} />
-				<Route exact path='/manager/orders' component={OrderList} />
-				<Route exact path='/manager/orders/:orderNum' component={Order} />
-				<Route exact path='/manager/systems' component={SystemsSettings} />
+				<PrivateRoute exact path='/account'>
+					<UserPage />
+				</PrivateRoute>
+				<PrivateRoute exact path='/manager'>
+					<Manager />
+				</PrivateRoute>
+				<PrivateRoute exact path='/manager/orders'>
+					<OrderList />
+				</PrivateRoute>
+				<PrivateRoute exact path='/manager/orders/:orderNum'>
+					<Order />
+				</PrivateRoute>
+				<PrivateRoute exact path='/manager/systems'>
+					<SystemsSettings />
+				</PrivateRoute>
 				<Route path='/manager/systems/:systemName' component={NewSystem} />
-				<Route
-					exact
-					path='/manager/transactions'
-					component={TransactionSettings}
-				/>
-				<Route
-					exact
-					path='/manager/transactions/:transactionName'
-					component={NewTransaction}
-				/>
+				<PrivateRoute exact path='/manager/transactions'>
+					<TransactionSettings />
+				</PrivateRoute>
+				<PrivateRoute exact path='/manager/transactions/:transactionName'>
+					<NewTransaction />
+				</PrivateRoute>
+				<Route path='*'>
+					<NoMatch />
+				</Route>
 			</Switch>
-		</>
+		</ProvideAuth>
 	)
 }
 

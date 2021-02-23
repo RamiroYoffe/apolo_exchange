@@ -64,10 +64,17 @@ exports.user_register = (req, res, next) => {
 						user
 							.save()
 							.then((result) => {
-								res.status(201).json({
-									message: 'Created User succesfully',
-									createdUser: result,
-								})
+								const token = jwt.sign(
+									{
+										mail: result.mail,
+										userId: result._id,
+									},
+									'secret',
+									{
+										expiresIn: '1h',
+									}
+								)
+								res.cookie('token', token, { httpOnly: true }).send()
 							})
 							.catch((err) => {
 								console.log(err)
@@ -105,10 +112,7 @@ exports.user_login = (req, res, next) => {
 							expiresIn: '1h',
 						}
 					)
-					res.status(200).json({
-						message: 'Auth Succesful',
-						token: token,
-					})
+					res.cookie('token', token, { httpOnly: true }).send()
 				} else {
 					res.status(401).json({ message: 'Auth Failed' })
 				}

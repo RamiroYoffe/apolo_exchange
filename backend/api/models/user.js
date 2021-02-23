@@ -2,9 +2,9 @@ const mongoose = require('mongoose')
 
 const userSchema = mongoose.Schema({
 	_id: mongoose.Schema.Types.ObjectId,
-	cbu: { type: String, required: true },
-	cuil: { type: String, required: true },
-	bank: { type: String, required: true },
+	cbu: { type: String },
+	cuil: { type: String },
+	bank: { type: String },
 	account_name: { type: String, required: true },
 	user_name: { type: String, required: true },
 	mail: {

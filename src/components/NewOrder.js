@@ -70,89 +70,98 @@ function NewOrder(props) {
 	}
 
 	return (
-		<Form>
-			{fields.filter((e) => e.value === 'mail').length > 0 ? (
-				<Form.Group controlId='formBasicEmail'>
-					<Form.Label>Correo Electronico</Form.Label>
-					<InputGroup className='mb-3'>
+		<div>
+			<Form>
+				{fields.filter((e) => e.value === 'mail').length > 0 ? (
+					<Form.Group controlId='formBasicEmail'>
+						<Form.Label>Correo Electronico</Form.Label>
+						<InputGroup className='mb-3'>
+							<Form.Control
+								type='email'
+								value={mail}
+								onChange={(e) => validateEmail(e.target.value)}
+							/>
+							<InputGroup.Append>
+								{correctInfo === false ? (
+									<InputGroup.Text id='basic-addon1'>
+										Invalid email
+									</InputGroup.Text>
+								) : (
+									''
+								)}
+								{correctInfo === true ? (
+									<InputGroup.Text id='basic-addon1'>
+										✓
+									</InputGroup.Text>
+								) : (
+									''
+								)}
+							</InputGroup.Append>
+						</InputGroup>
+					</Form.Group>
+				) : (
+					''
+				)}
+				{fields.filter((e) => e.value === 'name').length > 0 ? (
+					<Form.Group controlId='formBasicName'>
+						<Form.Label>Nombre y Apellido</Form.Label>
 						<Form.Control
-							type='email'
-							value={mail}
-							onChange={(e) => validateEmail(e.target.value)}
+							type='name'
+							value={name}
+							onChange={(e) => setName(e.target.value)}
 						/>
-						<InputGroup.Append>
-							{correctInfo === false ? (
-								<InputGroup.Text id='basic-addon1'>
-									Invalid email
-								</InputGroup.Text>
-							) : (
-								''
-							)}
-							{correctInfo === true ? (
-								<InputGroup.Text id='basic-addon1'>✓</InputGroup.Text>
-							) : (
-								''
-							)}
-						</InputGroup.Append>
-					</InputGroup>
-				</Form.Group>
-			) : (
-				''
-			)}
-			{fields.filter((e) => e.value === 'name').length > 0 ? (
-				<Form.Group controlId='formBasicName'>
-					<Form.Label>Nombre y Apellido</Form.Label>
-					<Form.Control
-						type='name'
-						value={name}
-						onChange={(e) => setName(e.target.value)}
-					/>
-				</Form.Group>
-			) : (
-				''
-			)}
-			{fields.filter((e) => e.value === 'CUIL').length > 0 ? (
-				<Form.Group controlId='formBasicCuil'>
-					<Form.Label>CUIL</Form.Label>
-					<Form.Control
-						value={cuil}
-						type='text'
-						maxLength='11'
-						onChange={(e) => setCuil(e.target.value)}
-					/>
-				</Form.Group>
-			) : (
-				''
-			)}
-			{fields.filter((e) => e.value === 'bank').length > 0 ? (
-				<Form.Group controlId='formBasicBank'>
-					<Form.Label>Nombre del banco</Form.Label>
-					<Form.Control
-						value={bank}
-						type='text'
-						onChange={(e) => setBank(e.target.value)}
-					/>
-				</Form.Group>
-			) : (
-				''
-			)}
-			{fields.filter((e) => e.value === 'CBU').length > 0 ? (
-				<Form.Group controlId='formBasicCBU'>
-					<Form.Label>CBU</Form.Label>
-					<Form.Control
-						value={cbu}
-						type='text'
-						maxLength='22'
-						onChange={(e) => setCbu(e.target.value)}
-					/>
-				</Form.Group>
-			) : (
-				''
-			)}
-			<Button variant='primary' onClick={createOrder}>
-				Crear Orden
-			</Button>
-		</Form>
+					</Form.Group>
+				) : (
+					''
+				)}
+				{fields.filter((e) => e.value === 'CUIL').length > 0 ? (
+					<Form.Group controlId='formBasicCuil'>
+						<Form.Label>CUIL</Form.Label>
+						<Form.Control
+							value={cuil}
+							type='text'
+							maxLength='11'
+							onChange={(e) => setCuil(e.target.value)}
+						/>
+					</Form.Group>
+				) : (
+					''
+				)}
+				{fields.filter((e) => e.value === 'bank').length > 0 ? (
+					<Form.Group controlId='formBasicBank'>
+						<Form.Label>Nombre del banco</Form.Label>
+						<Form.Control
+							value={bank}
+							type='text'
+							onChange={(e) => setBank(e.target.value)}
+						/>
+					</Form.Group>
+				) : (
+					''
+				)}
+				{fields.filter((e) => e.value === 'CBU').length > 0 ? (
+					<Form.Group controlId='formBasicCBU'>
+						<Form.Label>CBU</Form.Label>
+						<Form.Control
+							value={cbu}
+							type='text'
+							maxLength='22'
+							onChange={(e) => setCbu(e.target.value)}
+						/>
+					</Form.Group>
+				) : (
+					''
+				)}
+				<Button
+					variant='primary'
+					style={{ margin: '2%' }}
+					className='mx-auto'
+					onClick={createOrder}
+				>
+					Crear Orden
+				</Button>
+			</Form>
+		</div>
 	)
 }
 

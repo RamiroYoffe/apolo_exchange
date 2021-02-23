@@ -18,7 +18,12 @@ app.use(morgan('dev'))
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(cors())
+app.use(
+	cors({
+		origin: ['http://localhost:3000'],
+		credentials: true,
+	})
+)
 app.use('/', router)
 app.use('/currency', currencyRoutes)
 app.use('/user', userRoutes)

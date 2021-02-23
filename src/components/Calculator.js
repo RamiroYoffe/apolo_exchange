@@ -6,8 +6,7 @@ import CurrencySelector from './CurrencySelector'
 import Button from 'react-bootstrap/Button'
 import Form from 'react-bootstrap/Form'
 import Col from 'react-bootstrap/Col'
-import Container from 'react-bootstrap/Container'
-import { Card, Row } from 'react-bootstrap'
+import { Card } from 'react-bootstrap'
 
 function Calculator(props) {
 	const [firstAmount, setFirstAmount] = useState(0)
@@ -209,136 +208,126 @@ function Calculator(props) {
 	}
 
 	return (
-		<Container fluid>
-			<Row>
-				<Col xs='12' sm='10' md='8' lg='6' xl='4'>
-					<Card
-						bg='light'
+		<Card
+			bg='light'
+			style={{
+				alignItems: 'center',
+				justifyItems: 'center',
+				borderRadius: '10%',
+				padding: '2%',
+				margin: '10%',
+			}}
+		>
+			<Form>
+				<Form.Row>
+					<Col xs='12' sm='12' md='12' lg='12' xl='12'>
+						<Form.Label
+							style={{
+								marginLeft: '2%',
+							}}
+						>
+							Quiero vender: {firstSystem.currency}
+						</Form.Label>
+					</Col>
+					<Col xs='12' sm='6' md='6' lg='6' xl='6	'>
+						<CurrencyInput
+							option={1}
+							amount={firstAmount}
+							onAmountChange={handleAmountChange}
+						/>
+					</Col>
+					<Col xs='12' sm='6' md='6' lg='6' xl='6'>
+						<CurrencySelector
+							systems={info}
+							amount={secondAmount}
+							option={1}
+							value={firstSystem.value}
+							otherSystem={secondSystem}
+							onSelectChange={handleSelectChange}
+							convertTo={convertTo}
+						/>
+					</Col>
+					<Col xs='12' sm='12' md='12' lg='12' xl='12'>
+						{firstAmount < firstSystem.minimum ? (
+							<Form.Text
+								muted
+								style={{
+									marginLeft: '2%',
+								}}
+							>
+								El monto debe superar los {firstSystem.minimum}{' '}
+								{firstSystem.currency}
+							</Form.Text>
+						) : (
+							''
+						)}
+					</Col>
+
+					<Button
+						className='mb-2 mx-auto'
 						style={{
-							alignItems: 'center',
-							justifyItems: 'center',
-							borderRadius: '10%',
-							padding: '2%',
-							margin: '10%',
+							margin: '2%',
+							color: 'white',
+							backgroundColor: 'indigo',
+							borderRadius: '50%',
 						}}
+						onClick={switchSistems}
 					>
-						<Form>
-							<Form.Row>
-								<Col xs='12' sm='12' md='12' lg='12' xl='12'>
-									<Form.Label
-										style={{
-											marginLeft: '2%',
-										}}
-									>
-										Quiero vender: {firstSystem.currency}
-									</Form.Label>
-								</Col>
-								<Col xs='12' sm='6' md='6' lg='6' xl='6	'>
-									<CurrencyInput
-										option={1}
-										amount={firstAmount}
-										onAmountChange={handleAmountChange}
-									/>
-								</Col>
-								<Col xs='12' sm='6' md='6' lg='6' xl='6'>
-									<CurrencySelector
-										systems={info}
-										amount={secondAmount}
-										option={1}
-										value={firstSystem.value}
-										otherSystem={secondSystem}
-										onSelectChange={handleSelectChange}
-										convertTo={convertTo}
-									/>
-								</Col>
-								<Col xs='12' sm='12' md='12' lg='12' xl='12'>
-									{firstAmount < firstSystem.minimum ? (
-										<Form.Text
-											muted
-											style={{
-												marginLeft: '2%',
-											}}
-										>
-											El monto debe superar los {firstSystem.minimum}{' '}
-											{firstSystem.currency}
-										</Form.Text>
-									) : (
-										''
-									)}
-								</Col>
+						⇅
+					</Button>
 
-								<Button
-									className='mb-2 mx-auto'
-									style={{
-										margin: '2%',
-										color: 'white',
-										backgroundColor: 'indigo',
-										borderRadius: '50%',
-									}}
-									onClick={switchSistems}
-								>
-									⇅
-								</Button>
+					<Col xs='12' sm='12' md='12' lg='12' xl='12'>
+						<Form.Label
+							style={{
+								marginLeft: '2%',
+							}}
+						>
+							Quiero comprar: {secondSystem.currency}
+						</Form.Label>
+					</Col>
+					<Col xs='12' sm='6' md='6' lg='6' xl='6'>
+						<CurrencyInput
+							option={2}
+							amount={secondAmount}
+							onAmountChange={handleAmountChange}
+						/>
+					</Col>
+					<Col xs='12' sm='6' md='6' lg='6' xl='6'>
+						<CurrencySelector
+							systems={info}
+							option={2}
+							amount={firstAmount}
+							value={secondSystem.value}
+							otherSystem={firstSystem}
+							onSelectChange={handleSelectChange}
+							convertTo={convertTo}
+						/>
+					</Col>
+					<Col xs='12' sm='12' md='12' lg='12' xl='12'>
+						{secondSystem.value === 'paypal' ||
+						secondSystem.value === 'paypalEU' ? (
+							<Form.Text id='passwordHelpBlock' muted>
+								Recuerde que este precio NO INCLUYE la comision de
+								paypal, la misma va a su cargo. La comision es 5.4% +
+								0.3 dolares. En esta transaccion puede haber hasta 24
+								horas de demora en enviar el saldo
+							</Form.Text>
+						) : (
+							''
+						)}
+					</Col>
 
-								<Col xs='12' sm='12' md='12' lg='12' xl='12'>
-									<Form.Label
-										style={{
-											marginLeft: '2%',
-										}}
-									>
-										Quiero comprar: {secondSystem.currency}
-									</Form.Label>
-								</Col>
-								<Col xs='12' sm='6' md='6' lg='6' xl='6'>
-									<CurrencyInput
-										option={2}
-										amount={secondAmount}
-										onAmountChange={handleAmountChange}
-									/>
-								</Col>
-								<Col xs='12' sm='6' md='6' lg='6' xl='6'>
-									<CurrencySelector
-										systems={info}
-										option={2}
-										amount={firstAmount}
-										value={secondSystem.value}
-										otherSystem={firstSystem}
-										onSelectChange={handleSelectChange}
-										convertTo={convertTo}
-									/>
-								</Col>
-								<Col xs='12' sm='12' md='12' lg='12' xl='12'>
-									{secondSystem.value === 'paypal' ||
-									secondSystem.value === 'paypalEU' ? (
-										<Form.Text id='passwordHelpBlock' muted>
-											Recuerde que este precio NO INCLUYE la comision
-											de paypal, la misma va a su cargo. La comision
-											es 5.4% + 0.3 dolares. En esta transaccion
-											puede haber hasta 24 horas de demora en enviar
-											el saldo
-										</Form.Text>
-									) : (
-										''
-									)}
-								</Col>
-
-								<Button
-									style={{ margin: '2%' }}
-									disabled={firstAmount < firstSystem.minimum}
-									className='mx-auto'
-									onClick={() => liftState(true)}
-								>
-									Siguiente
-								</Button>
-							</Form.Row>
-						</Form>
-					</Card>
-				</Col>
-				<Col>
-					<Card></Card>
-				</Col>
-			</Row>
-		</Container>
+					<Button
+						style={{ margin: '2%' }}
+						disabled={firstAmount < firstSystem.minimum}
+						className='mx-auto'
+						onClick={() => liftState(true)}
+					>
+						Siguiente
+					</Button>
+				</Form.Row>
+			</Form>
+		</Card>
 	)
 }
 
