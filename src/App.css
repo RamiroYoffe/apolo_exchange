@@ -1,0 +1,4 @@
+@font-face {
+	font-family: 'Porter';
+	src: local('Porter'), url(./fonts/PorterBold.ttf) format('truetype');
+}
