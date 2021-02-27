@@ -8,7 +8,28 @@ exports.user_get_all = (req, res, next) => {
     .exec()
     .then((docs) => {
       const response = {
-        monedas: docs.map((doc) => {
+        Users: docs.map((doc) => {
+          return {
+            doc,
+          };
+        }),
+      };
+      res.status(200).json(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({
+        error: err,
+      });
+    });
+};
+
+exports.user_get_mail = (req, res, next) => {
+  User.find({ mail: res.locals.mail })
+    .exec()
+    .then((docs) => {
+      const response = {
+        User: docs.map((doc) => {
           return {
             doc,
           };
@@ -113,11 +134,15 @@ exports.user_login = (req, res, next) => {
               mail: usr[0].mail,
               userId: usr[0]._id,
             },
-            "secret",
+            process.env.JWT_KEY,
             {
               expiresIn: "1h",
             }
           );
+          res.status(200).json({
+            message: "Auth Succesful",
+            token: token,
+          });
         } else {
           res.status(401).json({ message: "Auth Failed" });
         }
