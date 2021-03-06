@@ -1,11 +1,13 @@
 import axios from 'axios'
 import React, { useState } from 'react'
+import { useAuth } from './Auth/use-auth'
 import { useHistory } from 'react-router-dom'
 import InputGroup from 'react-bootstrap/InputGroup'
 import Form from 'react-bootstrap/Form'
 import Button from 'react-bootstrap/Button'
 
 function NewOrder(props) {
+	const auth = useAuth()
 	const [name, setName] = useState('')
 	const [cbu, setCbu] = useState('')
 	const [cuil, setCuil] = useState('')

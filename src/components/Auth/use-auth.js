@@ -4,26 +4,25 @@ import { useHistory } from 'react-router-dom'
 
 const authContext = createContext()
 
-// Provider component that wraps your app and makes auth object ...
-// ... available to any child component that calls useAuth().
 export function ProvideAuth({ children }) {
 	const auth = useProvideAuth()
 	return <authContext.Provider value={auth}>{children}</authContext.Provider>
 }
 
-// Hook for child components to get the auth object ...
-// ... and re-render when it changes.
 export const useAuth = () => {
 	return useContext(authContext)
 }
 
-// Provider hook that creates auth object and handles state
 function useProvideAuth() {
-	const [user, setUser] = useState('fvdf')
+	const [user, setUser] = useState({
+		cbu: '2020202020',
+		cuil: '2020200202',
+		user_name: 'Rami',
+		account_name: 'Rami',
+		mail: 'rami@gmail.com',
+	})
 	const history = useHistory()
 
-	// Wrap any Firebase methods we want to use making sure ...
-	// ... to save the user to state.
 	const signin = (mail, password) => {
 		axios
 			.post('http://localhost:5000/user/login', {
@@ -32,7 +31,10 @@ function useProvideAuth() {
 			})
 			.then(function (response) {
 				console.log(response)
-				setUser(response)
+				const { token } = response.data
+				const { user } = response.data
+				setUser(user)
+				localStorage.setItem('token', token)
 				history.push(`/`)
 			})
 			.catch(function (error) {
@@ -51,7 +53,26 @@ function useProvideAuth() {
 			.then(function (response) {
 				console.log(response)
 				setUser(response)
-				history.push(`/`)
+				history.push(`/validateEmail`)
+			})
+			.catch(function (error) {
+				console.log(error)
+			})
+	}
+
+	const checkAlive = () => {
+		axios
+			.post(
+				'http://localhost:5000/user/alive',
+				{},
+				{
+					headers: {
+						Authorization: 'TOken',
+					},
+				}
+			)
+			.then(function (response) {
+				console.log(response)
 			})
 			.catch(function (error) {
 				console.log(error)
@@ -71,17 +92,13 @@ function useProvideAuth() {
 		return true
 	}
 
-	// Subscribe to user on mount
-	// Because this sets state in the callback it will cause any ...
-	// ... component that utilizes this hook to re-render with the ...
-	// ... latest auth object.
 	useEffect(() => {}, [])
 
-	// Return the user object and auth methods
 	return {
 		user,
 		signin,
 		signup,
+		checkAlive,
 		signout,
 		sendPasswordResetEmail,
 		confirmPasswordReset,

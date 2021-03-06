@@ -47,10 +47,9 @@ function App() {
 					<PrivateRoute exact path='/manager/systems'>
 						<SystemsSettings />
 					</PrivateRoute>
-					<Route
-						path='/manager/systems/:systemName'
-						component={NewSystem}
-					/>
+					<PrivateRoute exact path='/manager/systems/:systemName'>
+						<NewSystem />
+					</PrivateRoute>
 					<PrivateRoute exact path='/manager/transactions'>
 						<TransactionSettings />
 					</PrivateRoute>
