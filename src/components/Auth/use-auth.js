@@ -21,6 +21,7 @@ function useProvideAuth() {
 		account_name: 'Rami',
 		mail: 'rami@gmail.com',
 	})
+	const [alive, setAlive] = useState(false)
 	const history = useHistory()
 
 	const signin = (mail, password) => {
@@ -62,17 +63,13 @@ function useProvideAuth() {
 
 	const checkAlive = () => {
 		axios
-			.post(
-				'http://localhost:5000/user/alive',
-				{},
-				{
-					headers: {
-						Authorization: 'TOken',
-					},
-				}
-			)
+			.get('http://localhost:5000/user/alive', {
+				headers: {
+					authorization: localStorage.getItem('token'),
+				},
+			})
 			.then(function (response) {
-				console.log(response)
+				setAlive(response.status === 200 ? true : false)
 			})
 			.catch(function (error) {
 				console.log(error)
@@ -96,6 +93,7 @@ function useProvideAuth() {
 
 	return {
 		user,
+		alive,
 		signin,
 		signup,
 		checkAlive,

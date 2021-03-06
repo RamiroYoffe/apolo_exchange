@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { LinkContainer } from 'react-router-bootstrap'
 import { useAuth } from './Auth/use-auth'
 import Navbar from 'react-bootstrap/Navbar'
@@ -6,6 +6,14 @@ import Nav from 'react-bootstrap/Nav'
 
 function CustomNavbar() {
 	const auth = useAuth()
+
+	function checkAlive() {
+		auth.checkAlive()
+	}
+
+	useEffect(() => {
+		checkAlive()
+	}, [])
 
 	return (
 		<Navbar bg='light' expand='lg'>
@@ -17,7 +25,7 @@ function CustomNavbar() {
 					<Nav.Link>Inicio</Nav.Link>
 				</LinkContainer>
 
-				{auth.user ? (
+				{auth.alive ? (
 					<Nav className='mr-auto'>
 						<LinkContainer to='/manager'>
 							<Nav.Link>Configuracion</Nav.Link>

@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useAuth } from '../Auth/use-auth'
 
 function UserPage() {
 	const auth = useAuth()
 	const user = auth.user
+
 	return (
 		<div
 			style={{

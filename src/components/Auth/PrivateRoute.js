@@ -1,14 +1,23 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Route, Redirect } from 'react-router-dom'
 import { useAuth } from './use-auth.js'
 
 function PrivateRoute({ children, ...rest }) {
 	const auth = useAuth()
+
+	function checkAlive() {
+		auth.checkAlive()
+	}
+
+	useEffect(() => {
+		checkAlive()
+	}, [])
+
 	return (
 		<Route
 			{...rest}
 			render={({ location }) =>
-				auth.user === 0 ? (
+				auth.alive ? (
 					children
 				) : (
 					<Redirect
