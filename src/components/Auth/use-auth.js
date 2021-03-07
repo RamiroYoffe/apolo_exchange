@@ -31,7 +31,6 @@ function useProvideAuth() {
 				password: password,
 			})
 			.then(function (response) {
-				console.log(response)
 				const { token } = response.data
 				const { user } = response.data
 				setUser(user)
