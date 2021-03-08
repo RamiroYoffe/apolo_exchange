@@ -13,6 +13,7 @@ function CustomNavbar() {
 
 	useEffect(() => {
 		checkAlive()
+	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [])
 
 	return (

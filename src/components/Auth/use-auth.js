@@ -17,6 +17,7 @@ function useProvideAuth() {
 	const [user, setUser] = useState({
 		cbu: '2020202020',
 		cuil: '2020200202',
+		bank: 'frances',
 		user_name: 'Rami',
 		account_name: 'Rami',
 		mail: 'rami@gmail.com',
@@ -35,6 +36,7 @@ function useProvideAuth() {
 				const { user } = response.data
 				setUser(user)
 				localStorage.setItem('token', token)
+				checkAlive()
 				history.push(`/`)
 			})
 			.catch(function (error) {
@@ -51,12 +53,11 @@ function useProvideAuth() {
 				password: password,
 			})
 			.then(function (response) {
-				console.log(response)
 				setUser(response)
 				history.push(`/validateEmail`)
 			})
 			.catch(function (error) {
-				console.log(error)
+				// console.log(error)
 			})
 	}
 
@@ -71,7 +72,9 @@ function useProvideAuth() {
 				setAlive(response.status === 200 ? true : false)
 			})
 			.catch(function (error) {
-				console.log(error)
+				if (error.message === 'Request failed with status code 500') {
+					setAlive('false')
+				}
 			})
 	}
 

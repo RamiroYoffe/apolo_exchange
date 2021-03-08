@@ -12,8 +12,8 @@ function LogIn() {
 	const history = useHistory()
 	const location = useLocation()
 	const auth = useAuth()
-	const [mail, setMail] = useState()
-	const [password, setPassword] = useState()
+	const [mail, setMail] = useState('')
+	const [password, setPassword] = useState('')
 
 	let { from } = location.state || { from: { pathname: '/' } }
 	function login() {

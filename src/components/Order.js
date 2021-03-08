@@ -11,6 +11,7 @@ function Order() {
 	const [order, setOrder] = useState({
 		cbu: '3453453643',
 		cuil: '878347585',
+		bank: 'frances',
 		account_name: 'Guido Boschetti',
 		user_name: 'Guido Boschetti',
 		mail: 'guido.boschetti3@gmail.com',
@@ -91,6 +92,14 @@ function Order() {
 					</Form.Label>
 					<Col sm='10'>
 						<Form.Control readOnly defaultValue={order.cbu} />
+					</Col>
+				</Form.Group>
+				<Form.Group as={Row} controlId='formPlaintextEmail'>
+					<Form.Label column sm='2'>
+						Banco
+					</Form.Label>
+					<Col sm='10'>
+						<Form.Control readOnly defaultValue={order.bank} />
 					</Col>
 				</Form.Group>
 				<Form.Group as={Row} controlId='formBasicUSDValue'>
